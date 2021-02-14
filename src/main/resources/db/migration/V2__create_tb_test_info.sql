@@ -1,0 +1,40 @@
+CREATE TABLE if NOT EXISTS whopuppy.board(
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    board VARCHAR(20) UNIQUE NOT NULL
+)DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+CREATE TABLE if NOT EXISTS whopuppy.want_adopt_board(
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    board_id BIGINT NOT NULL UNIQUE,
+    user_id BIGINT NOT NULL UNIQUE,
+    title VARCHAR(50) NOT NULL,
+    content VARCHAR(300) NOT NULL,
+    thumnail VARCHAR(255),
+    is_deleted TINYINT DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+CREATE TABLE if NOT EXISTS whopuppy.user(
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    account VARCHAR(50) NOT NULL UNIQUE,
+    password TEXT NOT NULL,
+    nickname VARCHAR(50) NOT NULL UNIQUE,
+    phone_number VARCHAR(30) NOT NULL  UNIQUE,
+    salt VARCHAR(255) NOT NULL UNIQUE,
+    profile_image_url VARCHAR(255),
+    is_deleted TINYINT(1) DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+create table if NOT EXISTS whopuppy.auth(
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    account VARCHAR(50) NOT NULL UNIQUE,
+    phone_number VARCHAR(30) NOT NULL  UNIQUE,
+    flag INT NOT NULL,
+    is_authed TINYINT DEFAULT 0,
+    secret VARCHAR(8) NOT NULL,
+    expired_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)default character set utf8 collate utf8_general_ci;

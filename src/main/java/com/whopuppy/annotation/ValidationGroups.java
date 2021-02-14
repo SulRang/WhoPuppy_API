@@ -13,13 +13,8 @@ public final class ValidationGroups {
 
     private ValidationGroups() { }
 
-    // Standard groups
-
-    public interface Create extends Default {};
-    public interface Update extends Default {};
-
-    // Admin groups
-
-    public interface CreateAdmin extends Default {};
-    public interface UpdateAdmin extends Default {};
+    public interface signUp extends  Default{};
+    public interface logIn extends Default{};
+    public interface sendMessage extends Default{};
+    public interface configMessage extends Default{};
 }

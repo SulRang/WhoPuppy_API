@@ -23,7 +23,10 @@
 		</element>
 		<element name="object" disable="true" />
 		<element name="marquee" disable="true" />
-
+		<element name="head" disable="true" />
+		<element name="img" disable="false" >
+			<listener>com.whopuppy.listener.ImgListener</listener>
+		</element>
 	</elementRule>
 
 	<attributeRule>

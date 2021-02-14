@@ -26,7 +26,7 @@ public class S3Config {
     @Bean
     public AmazonS3 amazonS3(){
         AmazonS3 amazonS3 = AmazonS3ClientBuilder.standard()
-                .withRegion(Regions.AP_NORTHEAST_2)
+                .withRegion(Regions.AP_NORTHEAST_2) //서울
                 .withCredentials(new AWSStaticCredentialsProvider(this.AwsBasicAWSCredentials()))
                 .build();
         return  amazonS3;

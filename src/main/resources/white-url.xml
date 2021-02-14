@@ -251,5 +251,15 @@
 			<pattern>http://clips.twitch.tv/*</pattern>
 			<pattern>https://clips.twitch.tv/*</pattern>
 		</domain>
+
+		<domain name="https://whopuppy-storage.s3/" desc="s3BucketDomain">
+			<pattern>https://whopuppy-storage.s3.ap-northeast-2.amazonaws.com/*</pattern>
+			<pattern>http://whopuppy-storage.s3.ap-northeast-2.amazonaws.com/*</pattern>
+		</domain>
+		<domain name="https://static.whopuppy.com/" desc="s3SubDomain">
+			<pattern>https://static.whopuppy.com/*</pattern>
+			<pattern>http://static.whopuppy.com/*</pattern>
+		</domain>
+
 	</src>
 </white-url>
