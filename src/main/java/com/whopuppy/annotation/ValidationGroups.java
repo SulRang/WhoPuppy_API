@@ -15,6 +15,6 @@ public final class ValidationGroups {
 
     public interface signUp extends  Default{};
     public interface logIn extends Default{};
-    public interface sendMessage extends Default{};
-    public interface configMessage extends Default{};
+    public interface sendSms extends Default{};
+    public interface configSms extends Default{};
 }

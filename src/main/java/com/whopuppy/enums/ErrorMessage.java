@@ -1,41 +1,49 @@
 package com.whopuppy.enums;
 
-public enum ErrorMessage {
-	EXCEPTION_FOR_TEST(-1,"TEST를 위한 에러 메시지입니다."),
-	UNDEFINED_EXCEPTION(0,"정의되지 않은 에러입니다."),
-	NULL_POINTER_EXCEPTION(1,"NULL 여부를 확인해주세요"),
-	JSON_PARSE_EXCEPTION(2,"JSON Parse 과정에 문제가 있습니다. 데이터를 확인해주세요"),
-	AOP_XSS_SETTER_NO_EXSISTS_EXCEPTION(3,"해당 필드에 SETTER가 존재하지 않습니다."),
-	AOP_XSS_FIELD_NO_EXSISTS_EXCEPTION(3,"해당 필드에 FIELD가 존재하지 않습니다."),
-	/*
-	 * DB_CONSTRAIN INVALID
-	 */
-	DB_CONSTRAINT_INVALID(1080,"데이터베이스의 고유 제약 조건을 위반하였습니다."),
-	
-	/*
-	 * @VALID INVALID
-	 */
-	VALID_ANNOTATION_INVALID(1100,"@Validation 에러가 발생하였습니다."),
-	PAGENATION_INVALID(1120,"pagenation의 범위를 확인해주세요. 0 < page , 0 < per_count"),
-	
+import org.springframework.http.HttpStatus;
 
-	;
-	
-	
+public enum ErrorMessage {
+	UNDEFINED_EXCEPTION(0,"정의되지 않은 에러입니다.",HttpStatus.INTERNAL_SERVER_ERROR),
+	NULL_POINTER_EXCEPTION(1,"NULL 여부를 확인해주세요",HttpStatus.BAD_REQUEST),
+	JSON_PARSE_EXCEPTION(2,"JSON Parse 과정에 문제가 있습니다. 데이터를 확인해주세요",HttpStatus.BAD_REQUEST),
+	AOP_XSS_SETTER_NO_EXSISTS_EXCEPTION(3,"해당 필드에 SETTER가 존재하지 않습니다.",HttpStatus.BAD_REQUEST),
+	AOP_XSS_FIELD_NO_EXSISTS_EXCEPTION(4,"해당 필드에 FIELD가 존재하지 않습니다.",HttpStatus.BAD_REQUEST),
+	ACCESS_FORBIDDEN_AUTH_INVALID_EXCEPTION(5,"ACCESS TOKEN이 VALID하지 않습니다.",HttpStatus.UNAUTHORIZED),
+	REFRESH_FORBIDDEN_AUTH_INVALID_EXCEPTION(6,"REFRESH TOKEN이 VALID하지 않습니다.",HttpStatus.UNAUTHORIZED),
+	REQUEST_INVALID_EXCEPTION(7,"입력 값이 올바르지 않습니다.",HttpStatus.BAD_REQUEST),
+	ACCESS_FORBIDDEN_AUTH_EXPIRE_EXCEPTION(8,"ACCESS TOKEN이 EXPIRE 되었습니다.",HttpStatus.UNAUTHORIZED),
+	REFRESH_FORBIDDEN_AUTH_EXPIRE_EXCEPTION(9,"REFRESH TOKEN이 EXPIRE 되었습니다.",HttpStatus.UNAUTHORIZED),
+	SMS_EXPIRED_AUTH_EXCEPTION(10, " 인증번호가 만료되었습니다.",HttpStatus.BAD_REQUEST),
+	SMS_NONE_AUTH_EXCEPTION(11, "번호 인증을 해주세요.",HttpStatus.BAD_REQUEST),
+	SMS_SECRET_INVALID_EXCEPTION(12, "핸드폰 인증 번호를 확인해주세요.",HttpStatus.BAD_REQUEST),
+	SMS_ALREADY_AUTHED(13, "이미 인증된 번호입니다.",HttpStatus.BAD_REQUEST),
+	NO_USER_EXCEPTION(14, "가입되지 않은 계정입니다.",HttpStatus.BAD_REQUEST),
+	VALIDATION_FAIL_EXCEPTION(15, "입력값의 조건이 올바르지 않습니다", HttpStatus.BAD_REQUEST),
+	INVALID_RECOMMENDATION(16, "추천은 1회만 가능합니다.", HttpStatus.BAD_REQUEST),
+	INVALID_ACCESS_EXCEPTION(17, "존재하지 않는 게시글이거나 잘못된 접근입니다.", HttpStatus.BAD_REQUEST),
+	INVALID_USER_EXCEPTION(18, "회원 정보가 존재하지 않습니다", HttpStatus.BAD_REQUEST),
+	INVALID_SEMESTER_DATE_EXCEPTION(19, "잘못된 수강 학기입니다.", HttpStatus.BAD_REQUEST),
+	PROHIBITED_ATTEMPT(20, "수강 후기는 한 과목에 하나만 작성 가능합니다.", HttpStatus.BAD_REQUEST);
+
+
+
 	Integer code;
 	String errorMessage;
-	ErrorMessage(int code, String errorMessage) {
+	HttpStatus httpStatus;
+	ErrorMessage(int code, String errorMessage, HttpStatus httpStatus) {
 		this.code = code;
 		this.errorMessage = errorMessage;
+		this.httpStatus = httpStatus;
 	}
-	
-	
+
+
 	public Integer getCode() {
 		return code;
 	}
 	public String getErrorMessage() {
 		return errorMessage;
 	}
+	public HttpStatus getHttpStatus() {return httpStatus;}
 
 	
 }

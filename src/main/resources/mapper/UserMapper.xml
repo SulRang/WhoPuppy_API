@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.whopuppy.mapper.UserMapper">
+
+    <select id="getUserIdFromPhoneNumber"  resultType="Long">
+        SELECT id FROM whopuppy.user WHERE phone_number =#{phoneNumber}
+    </select>
+    <insert id="setAuthNumber">
+        INSERT INTO whopuppy.auth(account,phone_number,flag,secret,expired_at) VALUES (#{account}, #{phoneNumber},#{flag},#{secret}, #{expired_at} )
+    </insert>
+    <delete id="deleteAllAuthNumber">
+        DELETE FROM whopuppy.auth WHERE account=#{account} and flag = #{flag} and phone_number = #{phoneNumber}
+    </delete>
+
+    <select id="getSecret" resultType="com.whopuppy.domain.user.AuthNumber">
+        SELECT id, secret,flag, expired_at FROM whopuppy.auth WHERE account = #{account} and flag = #{flag} and phone_number = #{phoneNumber}
+    </select>
+
+    <update id="setIs_authed">
+        UPDATE whopuppy.auth   SET is_authed = #{is_authed} WHERE id=#{id}
+    </update>
+</mapper>

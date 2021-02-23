@@ -26,15 +26,14 @@ public class CoolSmsUtil {
 
 
     //단일 문자 발송 method
-    public void singleSms(String number) {
+    public void singleSms(String number, String text) {
         Message coolsms = new Message(coolSmsApiKey, coolSmSapiSecret);
 
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("to", number);
         params.put("from", from);
         params.put("type", "SMS");
-        params.put("mode", "test"); // If 'test' value, refund cash to point
-        params.put("text", "Coolsms Testing Message!");
+        params.put("text", text);
         params.put("app_version", "test app 1.2"); // application name and version
 
         try {

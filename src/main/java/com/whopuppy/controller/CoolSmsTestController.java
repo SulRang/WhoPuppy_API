@@ -15,7 +15,7 @@ public class CoolSmsTestController {
 
     @PostMapping("/single")
     public void singleSms(@RequestParam String number)  {
-        coolSmsUtil.singleSms(number);
+        coolSmsUtil.singleSms(number, "Test");
     }
     @PostMapping(value = "/group")
     public void groupSms(){

@@ -28,4 +28,10 @@ public class WantAdobtBoardController {
     public ResponseEntity postBoard(@RequestBody String wantAdoptBoard){
         return new ResponseEntity(wantAdoptBoardService.getThumnail(wantAdoptBoard),HttpStatus.OK);
     }
+
+    @Xss
+    @PostMapping(value="/board2")
+    public ResponseEntity postBoard2(@RequestBody String wantAdoptBoard){
+        return new ResponseEntity(wantAdoptBoard ,HttpStatus.OK);
+    }
 }
