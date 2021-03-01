@@ -147,13 +147,7 @@ public class UserServiceImpl implements UserService {
         else { // 발생 불가능
             throw new CriticalException(ErrorMessage.UNDEFINED_EXCEPTION);
         }
-        //TODO optional 인증 테이블에 해당 번호로 이루어진 이력 모두 삭제 ( hard delete함 )
-        /*
-        AuthNumber authNumber = new AuthNumber();
-        authNumber.setAccount(user.getPhoneNumber();
-        authNumber.setFlag(0);
-        userMapper.deleteAllAuthNumber(authNumber);
-         */
+
     }
 
     // 문자 발송
@@ -323,14 +317,6 @@ public class UserServiceImpl implements UserService {
         user.setPassword( BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()) );
 
 
-        // TODO : OPTIONAL 인증 테이블에 해당 계정으로된 인증 내역 모두 삭제
-        /*
-        AuthNumber authNumber = new AuthNumber();
-        authNumber.setAccount(user.getAccount());
-        authNumber.setFlag(1);
-        userMapper.deleteAllAuthNumber(authNumber);
-        */
-
         // 비밀번호 찾기 완료 시  phoneNumber, flag, ip가 같은 이전 이력은 모두 만료 + soft delete 시킴
         AuthNumber authNumber = new AuthNumber();
         authNumber.setIp(this.getClientIp());
@@ -398,6 +384,8 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public String setProfile(MultipartFile multipartFile)throws Exception{
+        if ( multipartFile == null )
+            return "파일을 선택해주세요";
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String token = request.getHeader(accessTokenName);
         if ( token == null){

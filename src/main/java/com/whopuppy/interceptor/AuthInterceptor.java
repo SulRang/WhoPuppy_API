@@ -46,13 +46,13 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 
                 else if (auth.role() == Auth.Role.ROOT) {
                     User user = userService.getMe();
-                    if (user.getRole().equals(auth.role().toString()))  // 로그인한 유저가 root 관리자 라면
+                    if (user.getRole() != null && user.getRole().equals(auth.role().toString()))  // 로그인한 유저가 root 관리자 라면
                         return true;
                 }
                 else if (auth.role() == Auth.Role.MANAGER) { // 매니저 용 이라면
                     User user = userService.getMe();
                     // 해당 유저가 매니저 유저 혹은 루트유저가 맞는가?
-                    if (user.getRole().equals(auth.role().toString()) ) {
+                    if (user.getRole() != null && user.getRole().equals(auth.role().toString()) ) {
                         //매니저 유저이고
                         for (int i = 0; i < user.getAuthority().size(); i++) {
                             if (user.getAuthority().get(i).getAuthority().equals(auth.authority().toString())) {
@@ -61,7 +61,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
                         }
                     }
                     // 해당 유저가 매니저 유저는 아니지만 루트 유저라면
-                    else if ( user.getRole().equals(Auth.Role.ROOT.toString()) )
+                    else if ( user.getRole() != null && user.getRole().equals(Auth.Role.ROOT.toString()) )
                         return true; // true
                 }
                 throw new ForbiddenException(ErrorMessage.FORBIDDEN_EXCEPTION);

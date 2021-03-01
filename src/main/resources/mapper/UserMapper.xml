@@ -78,13 +78,16 @@
             <property name="prefix" value=""/>
             <property name="alias" value="user."/>
         </include>
-        ,role.role
-        FROM whopuppy.user AS user JOIN whopuppy.admin as admin
+        FROM whopuppy.user WHERE is_deleted=0 AND id = #{id} LIMIT 1
+    </select>
+    <select id="getRole" resultType="String">
+        SELECT role.role FROM whopuppy.user AS user
+        JOIN whopuppy.admin AS admin
         ON user.id = admin.user_id
         JOIN whopuppy.admin_role AS role
         ON admin.admin_role_id = role.id
-        WHERE is_deleted=0 AND user.id = #{id}
-        LIMIT 1;
+        WHERE user.id = #{id}
+        LIMIT 1
     </select>
     <select id="getAuthority" resultType="com.whopuppy.domain.user.Authority">
         SELECT
@@ -95,7 +98,7 @@
         FROM whopuppy.admin AS admin
         JOIN whopuppy.admin_authority AS authority
         ON admin.admin_authority_id = authority.id
-        WHERE admin.user_id = #{id};
+        WHERE admin.user_id = #{id}
     </select>
 
     <resultMap id="userAll" type="com.whopuppy.domain.user.User">
@@ -106,6 +109,7 @@
         <result column="profile_image_url" property="profile_image_url"/>
         <result column="created_at" property="created_at"/>
         <result column="updated_at" property="updated_at"/>
+        <association property="role" column="id" javaType="String" select="getRole"></association>
         <collection column="id" property="authority" javaType="java.util.List" ofType="com.whopuppy.domain.user.Authority" select="getAuthority"> </collection>
     </resultMap>
 
@@ -127,4 +131,20 @@
     <update id="setProfile">
         UPDATE whopuppy.user SET profile_image_url = #{url} WHERE id = #{id} and is_deleted=0
     </update>
+
+    <select id="getAuthorityById" resultType="String">
+        SELECT authority.authority  FROM whopuppy.user AS user JOIN whopuppy.admin AS admin
+        ON  admin.user_id = user.id
+        JOIN whopuppy.admin_authority AS authority
+        ON admin.admin_authority_id = authority.id
+        WHERE user.id = #{id};
+    </select>
+
+    <insert id="grantAuthority">
+        INSERT INTO whopuppy.admin(user_id, admin_authority_id, admin_role_id) VALUES(#{id}, #{flag}, 2)
+    </insert>
+
+    <delete id="deleteAuthority">
+        DELETE FROM whopuppy.admin WHERE user_id = #{id} and admin_authority_id = #{flag}
+    </delete>
 </mapper>

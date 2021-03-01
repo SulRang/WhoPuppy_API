@@ -19,7 +19,6 @@ public interface UserMapper {
     List<AuthNumber> getSecret(AuthNumber authNumber);
     void setIs_authed(boolean is_authed,Long id);
     List<AuthNumber> getAuthTrue(String account, Integer flag, String phone_number);
-    void deleteAllAuthNumber(AuthNumber authNumber);
     void passwordUpdate(User user);
     void expirePastAuthNumber(AuthNumber authNumber);
     User getUserIdFromAccount(String account);
@@ -28,4 +27,8 @@ public interface UserMapper {
     User getMe(Long id);
     Integer authNumberAllSoftDeleteAfterUse(String phoneNumber, String ip, Timestamp start, Timestamp end);
     void setProfile(Long id, String url);
+    void grantAuthority(Long id, Integer flag);
+    List<String> getAuthorityById(Long id);
+    void deleteAuthority(Long id, Integer flag);
+    String getRole(Long id);
 }

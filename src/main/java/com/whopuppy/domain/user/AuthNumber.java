@@ -16,15 +16,17 @@ AuthNumber {
     @ApiModelProperty(hidden = true)
     private Long id;
 
-    @Size( min=6, max = 30,groups = { ValidationGroups.sendSms.class,  ValidationGroups.configSms.class}, message = "아이디는 6글자에서 30글자입니다")
-    @NotNull( groups = { ValidationGroups.sendSms.class,  ValidationGroups.configSms.class}, message = "아이디는 공백일 수 없습니다.")
+    @Size( min=6, max = 30,groups = { ValidationGroups.authority.class,ValidationGroups.sendSms.class,  ValidationGroups.configSms.class}, message = "아이디는 6글자에서 30글자입니다")
+    @NotNull( groups = { ValidationGroups.authority.class, ValidationGroups.sendSms.class,  ValidationGroups.configSms.class}, message = "아이디는 공백일 수 없습니다.")
     private String account;
     @NotNull( groups = { ValidationGroups.configSms.class,  ValidationGroups.sendSms.class}, message = "번호는 필수입니다.")
     @Size( min=11, max = 11,groups ={ ValidationGroups.configSms.class,  ValidationGroups.sendSms.class}, message = "핸드폰번호는 11글자입니다.")
     private String phone_number;
-    @NotNull( groups = { ValidationGroups.configSms.class,  ValidationGroups.sendSms.class}, message = "flag 값은 필수입니다.")
+    @NotNull( groups = { ValidationGroups.authority.class,ValidationGroups.configSms.class,  ValidationGroups.sendSms.class}, message = "flag 값은 필수입니다.")
     @Min( value = 0,groups = { ValidationGroups.configSms.class,  ValidationGroups.sendSms.class}, message = "번호 인증의 flag는 0 보다 작을 수 없습니다.")
     @Max(value = 1,groups = { ValidationGroups.configSms.class,  ValidationGroups.sendSms.class}, message = "번호 인증의 flag는 1 보다 클 수 없습니다.")
+    @Min( value = 1,groups = {ValidationGroups.authority.class}, message = "권한부여의 flag는 1 보다 작을 수 없습니다.")
+    @Max(value = 5,groups = { ValidationGroups.authority.class}, message = "권한부여의 flag는 5 보다 클 수 없습니다.")
     private Integer flag;
     @Size( min=6, max = 6,groups = ValidationGroups.configSms.class, message = "인증 키 값은 6글자입니다.")
     @NotNull( groups = ValidationGroups.configSms.class, message = "인증 키 값은 null일 수 없습니다.")

@@ -20,4 +20,5 @@ public final class ValidationGroups {
     public interface findPassword extends Default{};
     public interface nicknameCheck extends  Default{};
     public interface accountCheck extends  Default{};
+    public interface authority extends Default{};
 }

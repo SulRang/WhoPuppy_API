@@ -88,7 +88,7 @@ public class UserController {
     @Xss
     @ApiOperation(value ="계정 중복체크" , notes = "계정 중복 체크 api입니다")
     @RequestMapping (value = "/account", method = RequestMethod.POST)
-    public ResponseEntity accountCheck(@RequestBody @Validated(ValidationGroups.accountCheck.class)User user) {
+    public ResponseEntity accountCheck(@RequestBody @Validated(ValidationGroups.accountCheck.class) User user) {
         return new ResponseEntity(new BaseResponse( userService.accountCheck(user.getAccount()),HttpStatus.OK ), HttpStatus.OK);
     }
 

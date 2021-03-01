@@ -28,7 +28,10 @@ public enum ErrorMessage {
 	NICKNAME_DUPLICATE(22, "중복된 닉네임입니다.", HttpStatus.BAD_REQUEST),
 	PASSWORD_FAIL(23, "비밀번호가 틀렸습니다", HttpStatus.BAD_REQUEST),
 	ACCOUNT_FAIL(24, "아이디가 틀렸습니다", HttpStatus.BAD_REQUEST),
-	SMS_DAY_REQUEST_COUNT_EXCCED(25, "하루에 SMS인증은 5회까지만 가능합니다.",HttpStatus.BAD_REQUEST);
+	SMS_DAY_REQUEST_COUNT_EXCCED(25, "하루에 SMS인증은 5회까지만 가능합니다.",HttpStatus.BAD_REQUEST),
+	AUTHORITY_NOT_EXIST(26,"요청한 권한은 존재하지 않습니다",HttpStatus.BAD_REQUEST),
+	ROOT_AUTHORITY_CAN_NOT_DELETE_EXCEPTION(27,"루트 계정의 권한은 접근할 수 없습니다.",HttpStatus.BAD_REQUEST ),
+	USER_IS_NOT_MANAGER(28, "해당 유저는 관리자계정이 아닙니다", HttpStatus.BAD_REQUEST);
 
 	Integer code;
 	String errorMessage;
