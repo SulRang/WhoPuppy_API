@@ -18,10 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 @RestController
 @RequestMapping(value = "/user")
@@ -93,14 +89,14 @@ public class UserController {
     }
 
     //유저의 정보
-    @ApiOperation(value ="로그인한 유저의 정보" , notes = "현재 로그인한 유저의 정보를 return합니다. 로그인을 하지 않은 상태일 때는 null을 return합니다.")
+    @ApiOperation(value ="로그인한 유저의 정보" , notes = "현재 로그인한 유저의 정보를 return합니다. 로그인을 하지 않은 상태일 때는 null을 return합니다.", authorizations = @Authorization(value = "Bearer +accessToken"))
     @GetMapping(value = "/me")
     public ResponseEntity getMe(){
         return new ResponseEntity(userService.getMe(), HttpStatus.OK);
     }
 
     //
-    @ApiOperation(value ="프로필 사진 설정  " , notes = "프로필 사진 설정")
+    @ApiOperation(value ="프로필 사진 설정  " , notes = "프로필 사진 설정" , authorizations = @Authorization(value = "Bearer +accessToken"))
     @PostMapping(value = "/profile")
     public ResponseEntity setProfile(@RequestBody MultipartFile multipartFile) throws Exception{
         return new ResponseEntity( new BaseResponse(userService.setProfile(multipartFile),HttpStatus.OK ) , HttpStatus.OK );

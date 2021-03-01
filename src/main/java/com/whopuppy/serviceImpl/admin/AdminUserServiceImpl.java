@@ -32,7 +32,7 @@ public class AdminUserServiceImpl implements AdminUserService {
         String role = userMapper.getRole(user.getId());
 
         // 대상이 루트 유저인 경우 불가능
-        if ( role.equals(Auth.Role.ROOT.toString()))
+        if ( role != null && role.equals(Auth.Role.ROOT.toString()))
             throw new RequestInputException(ErrorMessage.ROOT_AUTHORITY_CAN_NOT_DELETE_EXCEPTION);
 
         //부여하고자 하는 권한
