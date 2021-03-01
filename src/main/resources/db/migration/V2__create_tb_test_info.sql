@@ -21,7 +21,7 @@ CREATE TABLE if NOT EXISTS whopuppy.user(
     password TEXT NOT NULL,
     nickname VARCHAR(50) NOT NULL UNIQUE,
     phone_number VARCHAR(30) NOT NULL  UNIQUE,
-    salt VARCHAR(255) NOT NULL UNIQUE,
+    salt VARCHAR(255) DEFAULT 0,
     profile_image_url VARCHAR(255),
     is_deleted TINYINT(1) DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -30,11 +30,35 @@ CREATE TABLE if NOT EXISTS whopuppy.user(
 
 create table if NOT EXISTS whopuppy.auth(
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    account VARCHAR(50) NOT NULL UNIQUE,
-    phone_number VARCHAR(30) NOT NULL  UNIQUE,
+    account VARCHAR(50) NOT NULL,
+    phone_number VARCHAR(30) NOT NULL,
     flag INT NOT NULL,
     is_authed TINYINT DEFAULT 0,
     secret VARCHAR(8) NOT NULL,
-    expired_at TIMESTAMP NOT NULL,
+    ip VARCHAR(20) NOT NULL,
+    is_deleted tinyint default 0,
+    expired_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)default character set utf8 collate utf8_general_ci;
+
+CREATE TABLE if NOT EXISTS whopuppy.admin(
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    admin_authority_id BIGINT,
+    admin_role_id BIGINT NOT NULL  DEFAULT 3,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)default character set utf8 collate utf8_general_ci;
+
+CREATE TABLE if NOT EXISTS whopuppy.admin_role(
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    role VARCHAR(30) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)default character set utf8 collate utf8_general_ci;
+
+
+CREATE TABLE if NOT EXISTS whopuppy.admin_authority(
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    authority VARCHAR(20) NOT NULL
 )default character set utf8 collate utf8_general_ci;

@@ -16,11 +16,12 @@ AuthNumber {
     @ApiModelProperty(hidden = true)
     private Long id;
 
+    @Size( min=6, max = 30,groups = { ValidationGroups.sendSms.class,  ValidationGroups.configSms.class}, message = "아이디는 6글자에서 30글자입니다")
     @NotNull( groups = { ValidationGroups.sendSms.class,  ValidationGroups.configSms.class}, message = "아이디는 공백일 수 없습니다.")
     private String account;
     @NotNull( groups = { ValidationGroups.configSms.class,  ValidationGroups.sendSms.class}, message = "번호는 필수입니다.")
     @Size( min=11, max = 11,groups ={ ValidationGroups.configSms.class,  ValidationGroups.sendSms.class}, message = "핸드폰번호는 11글자입니다.")
-    private String phoneNumber;
+    private String phone_number;
     @NotNull( groups = { ValidationGroups.configSms.class,  ValidationGroups.sendSms.class}, message = "flag 값은 필수입니다.")
     @Min( value = 0,groups = { ValidationGroups.configSms.class,  ValidationGroups.sendSms.class}, message = "번호 인증의 flag는 0 보다 작을 수 없습니다.")
     @Max(value = 1,groups = { ValidationGroups.configSms.class,  ValidationGroups.sendSms.class}, message = "번호 인증의 flag는 1 보다 클 수 없습니다.")
@@ -30,11 +31,14 @@ AuthNumber {
     private String secret;
 
     @ApiModelProperty(hidden = true)
+    private String ip;
+    @ApiModelProperty(hidden = true)
     private boolean is_authed;
     @ApiModelProperty(hidden = true)
     private Timestamp expired_at;
     @ApiModelProperty(hidden = true)
     private Timestamp created_at;
+
 
     public Long getId() {
         return id;
@@ -52,12 +56,12 @@ AuthNumber {
         this.account = account;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getPhone_number() {
+        return phone_number;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setPhone_number(String phone_number) {
+        this.phone_number = phone_number;
     }
 
     public Integer getFlag() {
@@ -68,20 +72,28 @@ AuthNumber {
         this.flag = flag;
     }
 
-    public boolean isIs_authed() {
-        return is_authed;
-    }
-
-    public void setIs_authed(boolean is_authed) {
-        this.is_authed = is_authed;
-    }
-
     public String getSecret() {
         return secret;
     }
 
     public void setSecret(String secret) {
         this.secret = secret;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public boolean isIs_authed() {
+        return is_authed;
+    }
+
+    public void setIs_authed(boolean is_authed) {
+        this.is_authed = is_authed;
     }
 
     public Timestamp getExpired_at() {

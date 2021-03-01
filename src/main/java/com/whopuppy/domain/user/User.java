@@ -1,30 +1,48 @@
 package com.whopuppy.domain.user;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.whopuppy.annotation.ValidationGroups;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.stereotype.Component;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.List;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Component
 public class User {
+    @ApiModelProperty(hidden = true)
     private Long id;
+
+    @Size( min=6, max = 30,groups = { ValidationGroups.logIn.class,  ValidationGroups.signUp.class, ValidationGroups.accountCheck.class}, message = "아이디는 6글자에서 30글자입니다")
+    @NotNull( groups = { ValidationGroups.logIn.class,  ValidationGroups.signUp.class, ValidationGroups.accountCheck.class}, message = "아이디는 공백일 수 없습니다.")
     private String account;
+    @NotNull(groups = {ValidationGroups.logIn.class, ValidationGroups.signUp.class, ValidationGroups.findPassword.class} , message = "패스워드는 비워둘 수 없습니다.")
     private String password;
-    private String phoneNumber;
+
+    @NotNull(groups = {ValidationGroups.signUp.class, ValidationGroups.nicknameCheck.class}, message = "닉네임은 비워둘 수 없습니다.")
+    @Size(min=1 ,groups = {ValidationGroups.signUp.class, ValidationGroups.nicknameCheck.class}, message = "닉네임은 최소한 한글자 이상 입니다.")
+    private String nickname;
+    @NotNull( groups =ValidationGroups.signUp.class, message = "번호는 필수입니다.")
+    @Size( min=11, max = 11,groups =  ValidationGroups.signUp.class, message = "핸드폰번호는 11글자입니다.")
+    private String phone_number;
+
+    @ApiModelProperty(hidden = true)
     private String salt;
-    private String profileImageUrl;
-    private List<Admin> admin;
-    private boolean isDeleted;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
-
-    public List<Admin> getAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(List<Admin> admin) {
-        this.admin = admin;
-    }
+    @ApiModelProperty(hidden = true)
+    private String profile_image_url;
+    @ApiModelProperty(hidden = true)
+    private String role;
+    @ApiModelProperty(hidden = true)
+    private List<Authority> authority;
+    @ApiModelProperty(hidden = true)
+    private boolean is_deleted;
+    @ApiModelProperty(hidden = true)
+    private Timestamp created_at;
+    @ApiModelProperty(hidden = true)
+    private Timestamp updated_at;
 
     public Long getId() {
         return id;
@@ -50,12 +68,20 @@ public class User {
         this.password = password;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getPhone_number() {
+        return phone_number;
+    }
+
+    public void setPhone_number(String phone_number) {
+        this.phone_number = phone_number;
     }
 
     public String getSalt() {
@@ -66,35 +92,51 @@ public class User {
         this.salt = salt;
     }
 
-    public String getProfileImageUrl() {
-        return profileImageUrl;
+    public String getProfile_image_url() {
+        return profile_image_url;
     }
 
-    public void setProfileImageUrl(String profileImageUrl) {
-        this.profileImageUrl = profileImageUrl;
+    public void setProfile_image_url(String profile_image_url) {
+        this.profile_image_url = profile_image_url;
     }
 
-    public boolean isDeleted() {
-        return isDeleted;
+    public String getRole() {
+        return role;
     }
 
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
+    public void setRole(String role) {
+        this.role = role;
     }
 
-    public Timestamp getCreatedAt() {
-        return createdAt;
+    public List<Authority> getAuthority() {
+        return authority;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
+    public void setAuthority(List<Authority> authority) {
+        this.authority = authority;
     }
 
-    public Timestamp getUpdatedAt() {
-        return updatedAt;
+    public boolean isIs_deleted() {
+        return is_deleted;
     }
 
-    public void setUpdatedAt(Timestamp updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setIs_deleted(boolean is_deleted) {
+        this.is_deleted = is_deleted;
+    }
+
+    public Timestamp getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(Timestamp created_at) {
+        this.created_at = created_at;
+    }
+
+    public Timestamp getUpdated_at() {
+        return updated_at;
+    }
+
+    public void setUpdated_at(Timestamp updated_at) {
+        this.updated_at = updated_at;
     }
 }

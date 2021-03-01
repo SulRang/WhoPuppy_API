@@ -19,13 +19,16 @@ public enum ErrorMessage {
 	SMS_ALREADY_AUTHED(13, "이미 인증된 번호입니다.",HttpStatus.BAD_REQUEST),
 	NO_USER_EXCEPTION(14, "가입되지 않은 계정입니다.",HttpStatus.BAD_REQUEST),
 	VALIDATION_FAIL_EXCEPTION(15, "입력값의 조건이 올바르지 않습니다", HttpStatus.BAD_REQUEST),
-	INVALID_RECOMMENDATION(16, "추천은 1회만 가능합니다.", HttpStatus.BAD_REQUEST),
+	FORBIDDEN_EXCEPTION(16, "작업을 수행할 수 있는 권한이 없습니다.", HttpStatus.UNAUTHORIZED),
 	INVALID_ACCESS_EXCEPTION(17, "존재하지 않는 게시글이거나 잘못된 접근입니다.", HttpStatus.BAD_REQUEST),
 	INVALID_USER_EXCEPTION(18, "회원 정보가 존재하지 않습니다", HttpStatus.BAD_REQUEST),
 	INVALID_SEMESTER_DATE_EXCEPTION(19, "잘못된 수강 학기입니다.", HttpStatus.BAD_REQUEST),
-	PROHIBITED_ATTEMPT(20, "수강 후기는 한 과목에 하나만 작성 가능합니다.", HttpStatus.BAD_REQUEST);
-
-
+	PROHIBITED_ATTEMPT(20, "수강 후기는 한 과목에 하나만 작성 가능합니다.", HttpStatus.BAD_REQUEST),
+	ACCOUNT_ALREADY_SIGNED_UP(21, "이미 가입된 계정입니다.", HttpStatus.BAD_REQUEST),
+	NICKNAME_DUPLICATE(22, "중복된 닉네임입니다.", HttpStatus.BAD_REQUEST),
+	PASSWORD_FAIL(23, "비밀번호가 틀렸습니다", HttpStatus.BAD_REQUEST),
+	ACCOUNT_FAIL(24, "아이디가 틀렸습니다", HttpStatus.BAD_REQUEST),
+	SMS_DAY_REQUEST_COUNT_EXCCED(25, "하루에 SMS인증은 5회까지만 가능합니다.",HttpStatus.BAD_REQUEST);
 
 	Integer code;
 	String errorMessage;
