@@ -1,5 +1,6 @@
 package com.whopuppy.enums;
 
+import com.amazonaws.services.xray.model.Http;
 import org.springframework.http.HttpStatus;
 
 public enum ErrorMessage {
@@ -31,7 +32,11 @@ public enum ErrorMessage {
 	SMS_DAY_REQUEST_COUNT_EXCCED(25, "하루에 SMS인증은 5회까지만 가능합니다.",HttpStatus.BAD_REQUEST),
 	AUTHORITY_NOT_EXIST(26,"요청한 권한은 존재하지 않습니다",HttpStatus.BAD_REQUEST),
 	ROOT_AUTHORITY_CAN_NOT_DELETE_EXCEPTION(27,"루트 계정의 권한은 접근할 수 없습니다.",HttpStatus.BAD_REQUEST ),
-	USER_IS_NOT_MANAGER(28, "해당 유저는 관리자계정이 아닙니다", HttpStatus.BAD_REQUEST);
+	USER_IS_NOT_MANAGER(28, "해당 유저는 관리자계정이 아닙니다", HttpStatus.BAD_REQUEST),
+	MULTIPART_FILE_NULL(29, "이미지가 NULL 입니다.", HttpStatus.BAD_REQUEST),
+	MULTIPART_FILE_NOT_IMAGE(30,"이미지가 아닌 다른 파일은 저장할 수 없습니다.", HttpStatus.BAD_REQUEST),
+	TARGET_ARTICLE_NOT_EXIST(31,"작성하려는 게시글이 존재하지 않습니다.", HttpStatus.BAD_REQUEST),
+	IMAGE_FORBIDDEN_EXCEPTION(32,"이미지가 정상적으로 등록되지 않았습니다.", HttpStatus.BAD_REQUEST);
 
 	Integer code;
 	String errorMessage;

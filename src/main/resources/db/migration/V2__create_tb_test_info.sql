@@ -62,3 +62,41 @@ CREATE TABLE if NOT EXISTS whopuppy.admin_authority(
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     authority VARCHAR(20) NOT NULL
 )default character set utf8 collate utf8_general_ci;
+
+CREATE TABLE if NOT EXISTS whopuppy.board(
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    board VARCHAR(20) NOT NULL UNIQUE
+)default character set utf8 collate utf8_general_ci;
+
+CREATE TABLE if NOT EXISTS whopuppy.article(
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    board_id BIGINT NOT NULL UNIQUE,
+    user_id BIGINT NOT NULL UNIQUE,
+    title VARCHAR(50),
+    content VARCHAR(500),
+    region VARCHAR(100),
+    thumbnail VARCHAR(255) UNIQUE,
+    is_deleted TINYINT NOT NULL DEFAULT 0,
+    is_posted TINYINT NOT NULL DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)default character set utf8 collate utf8_general_ci;
+
+CREATE TABLE if NOT EXISTS whopuppy.article_image(
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    article_id BIGINT NOT NULL,
+    image_url VARCHAR(255) NOT NULL UNIQUE,
+    is_use TINYINT NOT NULL DEFAULT 0,
+    is_deleted TINYINT NOT NULL DEFAULT 0,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+)default character set utf8 collate utf8_general_ci;
+
+CREATE TABLE if NOT EXISTS  whopuppy.review_comment(
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    article_id BIGINT NOT NULL,
+    user_id BIGINT NOT NULL,
+    content VARCHAR(200) NOT NULL,
+    is_deleted TINYINT NOT NULL DEFAULT 0,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)default character set utf8 collate utf8_general_ci;

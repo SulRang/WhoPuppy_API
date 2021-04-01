@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 @RestController
 public class CoolSmsTestController {
 
+    /*
     @Resource
     private CoolSmsUtil coolSmsUtil;
 
@@ -40,4 +41,5 @@ public class CoolSmsTestController {
     public void deleteGroup(@RequestParam String groupId){
         coolSmsUtil.deleteGroup(groupId);
     }
+     */
 }

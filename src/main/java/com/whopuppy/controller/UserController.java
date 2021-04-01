@@ -11,6 +11,7 @@ import com.whopuppy.response.BaseResponse;
 import com.whopuppy.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -24,6 +25,7 @@ import javax.annotation.Resource;
 public class UserController {
 
     @Resource
+    @Qualifier("UserServiceImpl")
     private UserService userService;
 
 
@@ -67,7 +69,7 @@ public class UserController {
     @Xss
     @RequestMapping( value ="/password" , method = RequestMethod.PUT)
     @ApiOperation(value ="비밀번호 재설정" , notes = "비밀번호 재 설정을 위한 api입니다. 이메일 인증이 선행되어야 합니다.")
-    public ResponseEntity passwordUpdate(@RequestBody User user)throws  Exception{
+    public ResponseEntity passwordUpdate(@RequestBody @Validated(ValidationGroups.findPassword.class) User user)throws  Exception{
         userService.passwordUpdate(user);
         return new ResponseEntity( new BaseResponse("비밀번호 재설정에 성공했습니다.", HttpStatus.OK), HttpStatus.OK);
     }

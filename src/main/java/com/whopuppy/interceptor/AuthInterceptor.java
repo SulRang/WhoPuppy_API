@@ -8,6 +8,7 @@ import com.whopuppy.exception.ForbiddenException;
 import com.whopuppy.service.UserService;
 import com.whopuppy.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,6 +24,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
     @Autowired
     private JwtUtil jwt;
     @Autowired
+    @Qualifier("UserServiceImpl")
     private UserService userService;
 
     @Override
@@ -38,6 +40,8 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
         }
         else if ( auth != null ) {// auth 어노테이션이 있다면
             String accessToken = request.getHeader("Authorization");
+            if ( accessToken == null)
+                throw new AccessTokenInvalidException(ErrorMessage.ACCESS_FORBIDDEN_AUTH_INVALID_EXCEPTION);
             int result = jwt.isValid(accessToken, 0); // flag 0 -> access / 1 refresh
 
             if (result == 0) { // access token이며 valid 하다면
@@ -53,6 +57,11 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
                     User user = userService.getMe();
                     // 해당 유저가 매니저 유저 혹은 루트유저가 맞는가?
                     if (user.getRole() != null && user.getRole().equals(auth.role().toString()) ) {
+                        // 매니저 유저이고
+                        if ( auth.authority().toString().equals(Auth.Authority.NONE.toString())){
+                            return true; // 필요한 따로 권한이 없는 경우
+                        }
+
                         //매니저 유저이고
                         for (int i = 0; i < user.getAuthority().size(); i++) {
                             if (user.getAuthority().get(i).getAuthority().equals(auth.authority().toString())) {

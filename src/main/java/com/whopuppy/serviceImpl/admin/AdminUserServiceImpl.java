@@ -7,6 +7,7 @@ import com.whopuppy.enums.ErrorMessage;
 import com.whopuppy.exception.RequestInputException;
 import com.whopuppy.mapper.UserMapper;
 import com.whopuppy.service.admin.AdminUserService;
+import com.whopuppy.serviceImpl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,8 @@ import java.util.List;
 
 @Transactional
 @Service
-public class AdminUserServiceImpl implements AdminUserService {
+public class AdminUserServiceImpl extends UserServiceImpl implements AdminUserService {
+
     @Autowired
     private UserMapper userMapper;
 
@@ -26,8 +28,6 @@ public class AdminUserServiceImpl implements AdminUserService {
         //없는 유저에 경우 Error
         if ( user == null)
             throw new RequestInputException(ErrorMessage.NO_USER_EXCEPTION);
-
-
 
         String role = userMapper.getRole(user.getId());
 
@@ -94,15 +94,11 @@ public class AdminUserServiceImpl implements AdminUserService {
     private String getTarget(Integer flag){
         switch (flag){
             case 1:
-                return Auth.Authority.USER.toString();
-            case 2:
                 return Auth.Authority.WANT_DO_ADOPT.toString();
-            case 3:
+            case 2:
                 return Auth.Authority.WANT_TAKE_ADOPT.toString();
-            case 4:
+            case 3:
                 return Auth.Authority.ADOPT_REVIEW.toString();
-            case 5:
-                return Auth.Authority.GRANT_MANAGER.toString();
             default:
                 // spring validation에서 체크가 되기 때문에 발생하지 않는 에러이다.
                 throw new RequestInputException(ErrorMessage.AUTHORITY_NOT_EXIST);

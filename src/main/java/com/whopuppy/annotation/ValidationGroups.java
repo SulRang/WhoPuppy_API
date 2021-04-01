@@ -21,4 +21,5 @@ public final class ValidationGroups {
     public interface nicknameCheck extends  Default{};
     public interface accountCheck extends  Default{};
     public interface authority extends Default{};
+    public interface postCommunity extends Default{};
 }

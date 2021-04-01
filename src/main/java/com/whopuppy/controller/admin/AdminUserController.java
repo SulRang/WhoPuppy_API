@@ -24,15 +24,15 @@ public class AdminUserController {
 
     //유저에게 권한을 부여한다
     // 매니저 (혹은 루트)이며 GRANT_MANAGER 권한을 가져야만 실행이 가능하다.
-    @Auth(role = Auth.Role.MANAGER, authority = Auth.Authority.GRANT_MANAGER)
+    @Auth(role = Auth.Role.ROOT)
     @ApiOperation( value = "관리자의 권한을 추가하는 api", notes = " ", authorizations = @Authorization(value = "Bearer +accessToken"))
-    @PostMapping("/authority")
+    @PostMapping("/authority/")
     public ResponseEntity grantWantTakeAdopt(@RequestBody  @Validated(ValidationGroups.authority.class) AuthNumber authNumber){
         return new ResponseEntity( new BaseResponse(adminUserService.grantAuthority(authNumber), HttpStatus.OK), HttpStatus.OK);
     }
 
     //유저의 권한을 제거한다
-    @Auth(role = Auth.Role.MANAGER, authority = Auth.Authority.GRANT_MANAGER)
+    @Auth(role = Auth.Role.ROOT)
     @ApiOperation( value = "관리자의 권한을 제거하는 api", notes = " ", authorizations = @Authorization(value = "Bearer +accessToken"))
     @DeleteMapping("/authority")
     public ResponseEntity deleteAuthority(@RequestBody @Validated(ValidationGroups.authority.class) AuthNumber authNumber){
@@ -48,7 +48,7 @@ public class AdminUserController {
         return "admin api test";
     }
 
-    @Auth(role = Auth.Role.MANAGER, authority = Auth.Authority.USER)
+    @Auth(role = Auth.Role.MANAGER, authority = Auth.Authority.NONE)
     @ApiOperation( value = " " , authorizations = @Authorization(value = "Bearer +accessToken"))
     @GetMapping(value = "/test2")
     public String test2(){

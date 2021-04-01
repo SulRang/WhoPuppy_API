@@ -1,6 +1,4 @@
 package com.whopuppy.serviceImpl;
-
-import com.whopuppy.annotation.Auth;
 import com.whopuppy.domain.user.AuthNumber;
 import com.whopuppy.domain.user.User;
 import com.whopuppy.enums.ErrorMessage;
@@ -23,13 +21,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Transactional
-@Service
+@Service("UserServiceImpl")
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -97,16 +93,6 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public void signUp(User user) throws Exception{
-        // 번호인증을 했는가?
-        List<AuthNumber> list = userMapper.getAuthTrue(user.getAccount(),0, user.getPhone_number());
-        if ( list.size() == 0){
-            throw new RequestInputException(ErrorMessage.SMS_NONE_AUTH_EXCEPTION);
-        }
-
-        // account 를 통한 중복가입 여부 확인
-        if ( userMapper.getUserIdFromAccount(user.getAccount() ) != null ) {
-            throw new RequestInputException(ErrorMessage.ACCOUNT_ALREADY_SIGNED_UP);
-        }
 
         // 닉네임 null,중복 체크
         if (user.getNickname() != null) {
@@ -114,6 +100,18 @@ public class UserServiceImpl implements UserService {
                 throw new RequestInputException(ErrorMessage.NICKNAME_DUPLICATE);
             }
         }
+
+        // account 를 통한 중복가입 여부 확인
+        if ( userMapper.getUserIdFromAccount(user.getAccount() ) != null ) {
+            throw new RequestInputException(ErrorMessage.ACCOUNT_ALREADY_SIGNED_UP);
+        }
+
+        // 번호인증을 했는가?
+        List<AuthNumber> list = userMapper.getAuthTrue(user.getAccount(),0, user.getPhone_number());
+        if ( list.size() == 0){
+            throw new RequestInputException(ErrorMessage.SMS_NONE_AUTH_EXCEPTION);
+        }
+
 
         // 비밀번호 암호화
         user.setPassword( BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()) );
@@ -172,7 +170,11 @@ public class UserServiceImpl implements UserService {
             if (id == null) {
                 throw new RequestInputException(ErrorMessage.NO_USER_EXCEPTION);
             }
-
+            // 이미 가입된 계정이름인지 체크
+            User dbUser = userMapper.getUserIdFromAccount(authNumber.getAccount());
+            if ( dbUser ==null ){
+                throw new RequestInputException(ErrorMessage.NO_USER_EXCEPTION);
+            }
         }
 
         // 1일 5회 요청제한을 넘겼는지
@@ -238,6 +240,11 @@ public class UserServiceImpl implements UserService {
         System.out.println(this.getClientIp());
         //회원가입 요청이라면
         if (authNumber.getFlag() == 0) {
+            // 이미 가입된 계정이름인지 체크
+            User dbUser = userMapper.getUserIdFromAccount(authNumber.getAccount());
+            if ( dbUser ==null ){
+                throw new RequestInputException(ErrorMessage.ACCOUNT_ALREADY_SIGNED_UP);
+            }
             // 이미 가입된 번호인지 체크
             Long id = userMapper.getUserIdFromPhoneNumber(authNumber.getPhone_number());
             if (id != null) {
@@ -246,6 +253,11 @@ public class UserServiceImpl implements UserService {
         }
         //비밀번호 찾기 요청이라면,
         if (authNumber.getFlag() == 1) {
+            // 이미 가입된 계정이름인지 체크
+            User dbUser = userMapper.getUserIdFromAccount(authNumber.getAccount());
+            if ( dbUser ==null ){
+                throw new RequestInputException(ErrorMessage.ACCOUNT_ALREADY_SIGNED_UP);
+            }
             //가입한 아이디가 없다면
             Long id = userMapper.getUserIdFromPhoneNumber(authNumber.getPhone_number());
             if (id == null) {
@@ -384,8 +396,15 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public String setProfile(MultipartFile multipartFile)throws Exception{
-        if ( multipartFile == null )
-            return "파일을 선택해주세요";
+        // multipartfile이 null인 경우
+        if ( multipartFile == null){
+            throw new RequestInputException(ErrorMessage.MULTIPART_FILE_NULL);
+        }
+        //multipartfile의 content type이 jpeg, png가 아닌경우
+
+        if( !multipartFile.getContentType().equals("image/jpeg") && !multipartFile.getContentType().equals("image/png")){
+            throw new RequestInputException(ErrorMessage.MULTIPART_FILE_NOT_IMAGE);
+        }
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String token = request.getHeader(accessTokenName);
         if ( token == null){
@@ -404,5 +423,25 @@ public class UserServiceImpl implements UserService {
             }
         }
         return "프로필 사진이 설정되었습니다";
+    }
+
+    @Override
+    public Long getLoginUserId(){
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String token = request.getHeader(accessTokenName);
+        if ( token == null){
+            throw new AccessTokenInvalidException(ErrorMessage.ACCESS_FORBIDDEN_AUTH_INVALID_EXCEPTION);
+        }
+        else {
+            // user id로 User를 select 하는것은 자유롭게 해도 좋으나, salt값은 조회,수정 하면안된다. 만약 참고할 일이있으면 정수현에게 다렉을 보내도록하자.
+            if ( jwtUtil.isValid(token,0) ==0 ) {
+                Map<String, Object> payloads = jwtUtil.validateFormat(token, 0);
+                Long id = Long.valueOf(String.valueOf(payloads.get("id")));
+                return id;
+            }
+            else{
+                throw new AccessTokenInvalidException(ErrorMessage.ACCESS_FORBIDDEN_AUTH_INVALID_EXCEPTION);
+            }
+        }
     }
 }

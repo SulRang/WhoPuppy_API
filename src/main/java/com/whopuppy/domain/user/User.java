@@ -19,6 +19,7 @@ public class User {
     @Size( min=6, max = 30,groups = { ValidationGroups.logIn.class,  ValidationGroups.signUp.class, ValidationGroups.accountCheck.class}, message = "아이디는 6글자에서 30글자입니다")
     @NotNull( groups = { ValidationGroups.logIn.class,  ValidationGroups.signUp.class, ValidationGroups.accountCheck.class}, message = "아이디는 공백일 수 없습니다.")
     private String account;
+    @Size( min=6, max = 20,groups = { ValidationGroups.logIn.class,  ValidationGroups.signUp.class, ValidationGroups.accountCheck.class}, message = "비밀번호는 6글자에서 20글자입니다")
     @NotNull(groups = {ValidationGroups.logIn.class, ValidationGroups.signUp.class, ValidationGroups.findPassword.class} , message = "패스워드는 비워둘 수 없습니다.")
     private String password;
 
