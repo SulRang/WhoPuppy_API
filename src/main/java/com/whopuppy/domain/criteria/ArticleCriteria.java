@@ -2,11 +2,14 @@ package com.whopuppy.domain.criteria;
 
 import io.swagger.annotations.ApiParam;
 
+import javax.validation.constraints.NotNull;
+
 public class ArticleCriteria extends  BaseCriteria{
     @ApiParam(required = false, defaultValue = "서울")
     private String region = null;
 
-    @ApiParam(hidden = true , required = false)
+    @NotNull
+    @ApiParam(required = true)
     private Long boardId = Long.valueOf(1);
 
     public String getRegion() {

@@ -35,7 +35,7 @@ public enum ErrorMessage {
 	USER_IS_NOT_MANAGER(28, "해당 유저는 관리자계정이 아닙니다", HttpStatus.BAD_REQUEST),
 	MULTIPART_FILE_NULL(29, "이미지가 NULL 입니다.", HttpStatus.BAD_REQUEST),
 	MULTIPART_FILE_NOT_IMAGE(30,"이미지가 아닌 다른 파일은 저장할 수 없습니다.", HttpStatus.BAD_REQUEST),
-	TARGET_ARTICLE_NOT_EXIST(31,"작성하려는 게시글이 존재하지 않습니다.", HttpStatus.BAD_REQUEST),
+	TARGET_ARTICLE_NOT_EXIST(31,"게시글이 존재하지 않습니다.", HttpStatus.BAD_REQUEST),
 	IMAGE_FORBIDDEN_EXCEPTION(32,"이미지가 정상적으로 등록되지 않았습니다.", HttpStatus.BAD_REQUEST);
 
 	Integer code;

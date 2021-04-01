@@ -75,7 +75,7 @@ CREATE TABLE if NOT EXISTS whopuppy.article(
     title VARCHAR(50),
     content VARCHAR(500),
     region VARCHAR(100),
-    thumbnail VARCHAR(255) UNIQUE,
+    thumbnail VARCHAR(255),
     is_deleted TINYINT NOT NULL DEFAULT 0,
     is_posted TINYINT NOT NULL DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -85,7 +85,7 @@ CREATE TABLE if NOT EXISTS whopuppy.article(
 CREATE TABLE if NOT EXISTS whopuppy.article_image(
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     article_id BIGINT NOT NULL,
-    image_url VARCHAR(255) NOT NULL UNIQUE,
+    image_url VARCHAR(255) NOT NULL,
     is_use TINYINT NOT NULL DEFAULT 0,
     is_deleted TINYINT NOT NULL DEFAULT 0,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP

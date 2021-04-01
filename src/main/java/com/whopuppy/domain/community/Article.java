@@ -13,8 +13,7 @@ import java.util.List;
 public class Article {
     @ApiModelProperty(hidden = true)
     private Long id;
-    @NotNull( groups = ValidationGroups.postCommunity.class, message = "게시판 선택은 필수 입니다.")
-    @Size(min = 1, max = 4, groups = ValidationGroups.postCommunity.class, message = "게시판 선택은 1-4까지입니다.")
+
     private Long board_id;
     @ApiModelProperty(hidden = true)
     private String board;
@@ -25,11 +24,11 @@ public class Article {
     @ApiModelProperty(hidden = true)
     private String profile_image_url;
 
-    @Size( min = 0, max =50 ,groups = ValidationGroups.postCommunity.class, message = "제목은 50글자 까지 입니다.")
+    @Size( min = 1, max =50 ,groups = ValidationGroups.postCommunity.class, message = "제목은 50글자 까지 입니다.")
     private String title;
-    @Size( min = 0, max =500 ,groups = ValidationGroups.postCommunity.class, message = "게시글은 500글자 까지 입니다.")
+    @Size( min = 1, max =500 ,groups = ValidationGroups.postCommunity.class, message = "게시글은 500글자 까지 입니다.")
     private String content;
-    @Size( min= 0 , max = 10, groups = ValidationGroups.postCommunity.class, message = "이미지는 최대 20장 까지 입니다.")
+    @Size( min= 0 , max = 10, groups = ValidationGroups.postCommunity.class, message = "이미지는 최대 10장 까지 입니다.")
     private List<ArticleImage> images;
 
     @NotNull( groups = ValidationGroups.postCommunity.class, message = "지역 선택은 필수 입니다.")

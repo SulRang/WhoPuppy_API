@@ -22,4 +22,6 @@ public interface CommunityMapper {
     List<Article> getArticles(ArticleCriteria articleCriteria);
     Long getArticleAuthor(Long id);
     void softDeleteArticle(Long id);
+    List<ArticleImage> initImages(Long id);
+
 }

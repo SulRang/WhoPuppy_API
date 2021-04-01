@@ -17,7 +17,7 @@ public interface BaseCommunity {
     ArticleImage uploadArticleImages(MultipartFile multipartFile, Long id) throws Exception;
     Long postTmpArticle(Article article);
     BaseResponse completeArticle(Article article, Long id);
-    List<Article> getArticles(Long boardId, ArticleCriteria articleCriteria);
+    List<Article> getArticles(ArticleCriteria articleCriteria);
     BaseResponse updateArticle(Article article, Long id);
     BaseResponse deleteArticle(Long id);
 }

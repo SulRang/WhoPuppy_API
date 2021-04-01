@@ -61,7 +61,7 @@
         a.board_id = #{boardId} AND a.is_posted = 1 AND a.is_deleted = 0
         <choose>
             <when test="@org.apache.commons.lang3.ObjectUtils@isNotEmpty(region)">
-              AND a.region = #{region}
+                AND a.region = #{region}
             </when>
         </choose>
         LIMIT #{cursor},#{limit}
@@ -127,4 +127,16 @@
         UPDATE whopuppy.article SET is_deleted = 1 WHERE id = #{id};
         UPDATE whopuppy.article_image SET is_deleted =1 WHERE article_id = #{id};
     </update>
+
+    <select id="initImages" resultType="com.whopuppy.domain.community.ArticleImage">
+        UPDATE whopuppy.article_image SET is_use = 0 WHERE article_id = #{id};
+        SELECT
+        <include refid="whopuppy_article_image">
+            <property name="alias" value=""/>
+            <property name="prefix" value=""/>
+        </include>
+        FROM whopuppy.article_image
+        WHERE article_id = #{id} and is_deleted = 0;
+    </select>
+
 </mapper>

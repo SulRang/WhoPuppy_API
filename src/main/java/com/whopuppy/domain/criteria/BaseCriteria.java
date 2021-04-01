@@ -9,6 +9,9 @@ public class BaseCriteria {
     @ApiParam(required = false, defaultValue = "10")
     private Integer limit = 10;
 
+    @ApiParam(hidden = true)
+    private Integer cursor;
+
     public Integer getLimit() {
         return limit;
     }
