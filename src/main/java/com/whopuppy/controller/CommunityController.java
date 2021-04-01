@@ -77,4 +77,5 @@ public class CommunityController {
         return new ResponseEntity( baseCommunity.deleteArticle(id), HttpStatus.OK);
     }
     //test
+    //test2
 }
