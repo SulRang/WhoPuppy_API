@@ -76,4 +76,5 @@ public class CommunityController {
     public ResponseEntity deleteArticle(@PathVariable Long id){
         return new ResponseEntity( baseCommunity.deleteArticle(id), HttpStatus.OK);
     }
+    //test
 }
