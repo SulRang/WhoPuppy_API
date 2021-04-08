@@ -242,7 +242,7 @@ public class UserServiceImpl implements UserService {
         if (authNumber.getFlag() == 0) {
             // 이미 가입된 계정이름인지 체크
             User dbUser = userMapper.getUserIdFromAccount(authNumber.getAccount());
-            if ( dbUser ==null ){
+            if ( dbUser !=null ){
                 throw new RequestInputException(ErrorMessage.ACCOUNT_ALREADY_SIGNED_UP);
             }
             // 이미 가입된 번호인지 체크

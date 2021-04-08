@@ -89,7 +89,7 @@ public class GlobalExceptionHandler {
 		String host = request.getHeader("host"); // boot.tikim.org
 		String uri = request.getRequestURI(); // /v1/sample
 
-		SlackTarget slackTarget = new SlackTarget(notifyErrorUrl,"");
+		SlackTarget slackTarget = new SlackTarget(notifyErrorUrl, "");
 		SlackParameter slackParameter = new SlackParameter();
 		slackParameter.setText(String.format("`%s` 서버에서 에러가 발생했습니다.", host));
 		SlackAttachment slackAttachment = new SlackAttachment();
@@ -107,7 +107,6 @@ public class GlobalExceptionHandler {
 		slackAttachment.setTitle(String.format("URI : %s", uri));
 		slackAttachment.setText(message);
 		slackParameter.getSlackAttachments().add(slackAttachment);
-		slackNotiSender.send(slackTarget,slackParameter);
+		slackNotiSender.send(slackTarget, slackParameter);
 	}
-	
 }

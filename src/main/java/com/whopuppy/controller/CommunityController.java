@@ -5,6 +5,7 @@ import com.whopuppy.annotation.Auth;
 import com.whopuppy.annotation.ValidationGroups;
 import com.whopuppy.annotation.Xss;
 import com.whopuppy.domain.community.Article;
+import com.whopuppy.domain.community.ArticleComment;
 import com.whopuppy.domain.criteria.ArticleCriteria;
 import com.whopuppy.response.BaseResponse;
 import com.whopuppy.service.BaseCommunity;
@@ -51,6 +52,7 @@ public class CommunityController {
         return new ResponseEntity(baseCommunity.uploadArticleImages(multipartFile, id), HttpStatus.OK);
     }
 
+    @Xss
     @Auth(authority = Auth.Authority.NONE, role = Auth.Role.NORMAL)
     @PostMapping("/article/{id}")
     @ApiOperation(value = "게시글 작성", notes = "게시글 작성", authorizations = @Authorization(value = "Bearer +accessToken"))
@@ -59,11 +61,13 @@ public class CommunityController {
     }
 
     @GetMapping("/article")
-    @ApiOperation(value = "게시글 조회", notes = "Board_id와 지역에 따른 게시글 조회 ")
+    @Auth(authority = Auth.Authority.NONE, role = Auth.Role.NORMAL)
+    @ApiOperation(value = "게시글 조회", notes = "Board_id와 지역에 따른 게시글 조회", authorizations = @Authorization(value = "Bearer +accessToken"))
     public ResponseEntity getArticles(@ModelAttribute ArticleCriteria articleCriteria) {
         return new ResponseEntity(baseCommunity.getArticles( articleCriteria), HttpStatus.CREATED);
     }
 
+    @Xss
     @PutMapping("/article/{id}")
     @Auth(authority = Auth.Authority.NONE, role = Auth.Role.NORMAL)
     @ApiOperation(value = "게시글 수정", notes = "게시글 수정", authorizations = @Authorization(value = "Bearer +accessToken"))
@@ -78,5 +82,27 @@ public class CommunityController {
         return new ResponseEntity(baseCommunity.deleteArticle(id), HttpStatus.OK);
     }
 
+    @Xss
+    @Auth(authority = Auth.Authority.NONE, role = Auth.Role.NORMAL)
+    @PostMapping("/article/{id}/comment")
+    @ApiOperation(value = "게시글에 댓글 작성", notes = "게시글에 댓글 작성", authorizations = @Authorization(value = "Bearer +accessToken"))
+    public ResponseEntity postComment(@RequestBody @Validated(ValidationGroups.postComment.class) ArticleComment articleComment, @PathVariable Long id) throws Exception {
+        return new ResponseEntity(baseCommunity.postComment(articleComment,id), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/article/{id}/comment/{commentId}")
+    @Auth(authority = Auth.Authority.NONE, role = Auth.Role.NORMAL)
+    @ApiOperation(value = "게시글에 댓글 삭제", notes = "게시글에 댓글 삭제", authorizations = @Authorization(value = "Bearer +accessToken"))
+    public ResponseEntity deleteComment(@PathVariable Long commentId, @PathVariable Long id) {
+        return new ResponseEntity(baseCommunity.deleteComment(id ,commentId ), HttpStatus.OK);
+    }
+
+
+    @GetMapping("/article/{id}/comment")
+    @Auth(authority = Auth.Authority.NONE, role = Auth.Role.NORMAL)
+    @ApiOperation(value = "게시글에 댓글 조회", notes = "게시글에 댓글 조회", authorizations = @Authorization(value = "Bearer +accessToken"))
+    public ResponseEntity deleteComment( @PathVariable Long id) {
+        return new ResponseEntity(baseCommunity.getComment(id ), HttpStatus.OK);
+    }
 
 }

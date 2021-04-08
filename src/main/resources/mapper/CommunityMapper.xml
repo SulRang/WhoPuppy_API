@@ -17,9 +17,12 @@
     </select>
 
     <select id="getTargetArticle" resultType="Long">
-        SELECT id FROM whopuppy.article WHERE id = #{id} and is_posted = 0;
+        SELECT id FROM whopuppy.article WHERE id = #{id} AND is_posted = 0 AND is_deleted = 0;
     </select>
 
+    <select id="getTargetArticlePosted" resultType="Long">
+        SELECT id FROM whopuppy.article WHERE id = #{id} AND is_posted = 1 AND is_deleted = 0;
+    </select>
     <select id="postArticleImage" resultType="Long">
         INSERT INTO whopuppy.article_image(article_id, image_url) VALUES (#{article_id}, #{image_url});
         SELECT LAST_INSERT_ID();
@@ -126,6 +129,7 @@
     <update id="softDeleteArticle">
         UPDATE whopuppy.article SET is_deleted = 1 WHERE id = #{id};
         UPDATE whopuppy.article_image SET is_deleted =1 WHERE article_id = #{id};
+        UPDATE whopuppy.article_comment SET is_deleted = 1 WHERE article_id = #{id};
     </update>
 
     <select id="initImages" resultType="com.whopuppy.domain.community.ArticleImage">
@@ -139,4 +143,24 @@
         WHERE article_id = #{id} and is_deleted = 0;
     </select>
 
+
+    <insert id="postComment">
+        INSERT INTO whopuppy.article_comment(article_id, user_id,content) VAlUES(#{article_id}, #{user_id}, #{content})
+    </insert>
+
+    <select id="getArticleComment" resultType="com.whopuppy.domain.community.ArticleComment">
+        SELECT a.id, a.article_id, a.user_id, u.nickname as user_nickname, a.content, a.created_at, a.updated_at
+        FROM whopuppy.article_comment AS a
+        JOIN whopuppy.user AS u
+        ON u.id = a.user_id
+        WHERE a.article_id = #{id} AND a.is_deleted = 0 AND u.is_deleted = 0;
+    </select>
+
+    <select id="getAuthorComment" resultType="Long">
+        SELECT user_id FROM whopuppy.article_comment WHERE id = #{commentId} AND article_id = #{id} AND is_deleted =0;
+    </select>
+
+    <update id="softDeleteComment">
+        UPDATE whopuppy.article_comment SET is_deleted = 1 WHERE id = #{commentId} AND article_id = #{id} AND is_deleted = 0;
+    </update>
 </mapper>

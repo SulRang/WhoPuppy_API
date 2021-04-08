@@ -1,20 +1,3 @@
-CREATE TABLE if NOT EXISTS whopuppy.board(
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    board VARCHAR(20) UNIQUE NOT NULL
-)DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-
-CREATE TABLE if NOT EXISTS whopuppy.want_adopt_board(
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    board_id BIGINT NOT NULL UNIQUE,
-    user_id BIGINT NOT NULL UNIQUE,
-    title VARCHAR(50) NOT NULL,
-    content VARCHAR(300) NOT NULL,
-    thumnail VARCHAR(255),
-    is_deleted TINYINT DEFAULT 0,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-
 CREATE TABLE if NOT EXISTS whopuppy.user(
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     account VARCHAR(50) NOT NULL UNIQUE,
@@ -70,8 +53,8 @@ CREATE TABLE if NOT EXISTS whopuppy.board(
 
 CREATE TABLE if NOT EXISTS whopuppy.article(
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    board_id BIGINT NOT NULL UNIQUE,
-    user_id BIGINT NOT NULL UNIQUE,
+    board_id BIGINT NOT NULL,
+    user_id BIGINT NOT NULL,
     title VARCHAR(50),
     content VARCHAR(500),
     region VARCHAR(100),
@@ -91,7 +74,7 @@ CREATE TABLE if NOT EXISTS whopuppy.article_image(
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 )default character set utf8 collate utf8_general_ci;
 
-CREATE TABLE if NOT EXISTS  whopuppy.review_comment(
+CREATE TABLE if NOT EXISTS  whopuppy.article_comment(
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     article_id BIGINT NOT NULL,
     user_id BIGINT NOT NULL,

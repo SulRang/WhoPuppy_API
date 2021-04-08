@@ -112,8 +112,6 @@
         <association property="role" column="id" javaType="String" select="getRole"></association>
         <collection column="id" property="authority" javaType="java.util.List" ofType="com.whopuppy.domain.user.Authority" select="getAuthority"> </collection>
     </resultMap>
-
-
     <sql id="userList">
         ${alias}id AS ${prefix}id
 		,${alias}account AS ${prefix}account

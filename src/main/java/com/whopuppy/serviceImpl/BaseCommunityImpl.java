@@ -1,6 +1,7 @@
 package com.whopuppy.serviceImpl;
 
 import com.whopuppy.domain.community.Article;
+import com.whopuppy.domain.community.ArticleComment;
 import com.whopuppy.domain.community.ArticleImage;
 import com.whopuppy.domain.community.Board;
 import com.whopuppy.domain.criteria.ArticleCriteria;
@@ -228,12 +229,76 @@ public class BaseCommunityImpl implements BaseCommunity {
 
     @Override
     public BaseResponse deleteArticle(Long id){
+
+        // 해당 게시글이 실제로 있는지 검사한다.
+        Long targetArticle = communityMapper.getTargetArticle(id);
+        if ( targetArticle == null){
+            throw new RequestInputException(ErrorMessage.TARGET_ARTICLE_NOT_EXIST);
+        }
+
         // 저자가 같은 지 검사한다.
         if ( communityMapper.getArticleAuthor(id) != userService.getLoginUserId()){
-            throw new ForbiddenException(ErrorMessage.FORBIDDEN_EXCEPTION);
+            throw new RequestInputException(ErrorMessage.NOT_AUTHOR);
         }
         // 해당 article과 해당 article에게 속해있는 모든 image soft delete
+        
+        // 댓글, 이미지, 본문 soft delete
         communityMapper.softDeleteArticle(id);
         return new BaseResponse("삭제가 완료되었습니다." ,HttpStatus.OK);
     }
+
+
+    // Article에 달린 comment를 조회한다.
+    public List<ArticleComment> getComment(Long id){
+
+        // 없는 article에 대한 comment를 요구하는 경우
+        Long target = communityMapper.getTargetArticlePosted(id);
+        if ( target == null){
+            throw new RequestInputException(ErrorMessage.TARGET_ARTICLE_NOT_EXIST);
+        }
+
+        return communityMapper.getArticleComment(id);
+    }
+
+    public BaseResponse postComment(ArticleComment articleComment, Long id){
+        // 댓글을 달 target article id set
+        articleComment.setArticle_id(id);
+
+        //댓글을 달 target article이 posted =1 상태로 존재하는 지 확인
+        Long target = communityMapper.getTargetArticlePosted(id);
+        if ( target == null){
+            throw new RequestInputException(ErrorMessage.TARGET_ARTICLE_NOT_EXIST);
+        }
+
+        // 로그인한 유저 set
+        Long userId = userService.getLoginUserId();
+        articleComment.setUser_id(userId);
+
+        communityMapper.postComment(articleComment);
+        return new BaseResponse("댓글이 작성되었습니다", HttpStatus.CREATED);
+    }
+
+    @Override
+    public BaseResponse deleteComment(Long id, Long commentId){
+
+        //해당 게시글 있는지 검사한다.
+        Long targetArticle = communityMapper.getTargetArticlePosted(id);
+        if ( targetArticle == null){
+            throw new RequestInputException(ErrorMessage.TARGET_ARTICLE_NOT_EXIST);
+        }
+        //해당 댓글이 있는지 검사한다.
+        Long author = communityMapper.getAuthorComment(id, commentId);
+        if ( author == null){
+            throw new RequestInputException(ErrorMessage.TARGET_ARTICLE_COMMENT_NOT_EXIST);
+        }
+
+        //저자가 같은기 검사한다
+        Long userId = userService.getLoginUserId();
+        if ( userId != author ){
+            throw new RequestInputException(ErrorMessage.NOT_AUTHOR);
+        }
+        communityMapper.softDeleteComment(id, commentId );
+        return new BaseResponse("댓글이 삭제되었습니다", HttpStatus.OK);
+    }
+
 }

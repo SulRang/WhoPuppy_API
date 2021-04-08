@@ -1,6 +1,7 @@
 package com.whopuppy.service;
 
 import com.whopuppy.domain.community.Article;
+import com.whopuppy.domain.community.ArticleComment;
 import com.whopuppy.domain.community.ArticleImage;
 import com.whopuppy.domain.community.Board;
 import com.whopuppy.domain.criteria.ArticleCriteria;
@@ -20,4 +21,8 @@ public interface BaseCommunity {
     List<Article> getArticles(ArticleCriteria articleCriteria);
     BaseResponse updateArticle(Article article, Long id);
     BaseResponse deleteArticle(Long id);
+    List<ArticleComment> getComment(Long id);
+    BaseResponse postComment(ArticleComment articleComment, Long id);
+    BaseResponse deleteComment(Long id, Long commentId);
+
 }

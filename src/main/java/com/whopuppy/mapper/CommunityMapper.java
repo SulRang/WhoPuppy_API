@@ -1,6 +1,7 @@
 package com.whopuppy.mapper;
 
 import com.whopuppy.domain.community.Article;
+import com.whopuppy.domain.community.ArticleComment;
 import com.whopuppy.domain.community.ArticleImage;
 import com.whopuppy.domain.community.Board;
 import com.whopuppy.domain.criteria.ArticleCriteria;
@@ -23,5 +24,10 @@ public interface CommunityMapper {
     Long getArticleAuthor(Long id);
     void softDeleteArticle(Long id);
     List<ArticleImage> initImages(Long id);
+    Long getTargetArticlePosted(Long id);
+    void postComment(ArticleComment articleComment);
+    List<ArticleComment> getArticleComment(Long id);
+    Long getAuthorComment(Long id, Long commentId);
+    void softDeleteComment(Long id, Long commentId);
 
 }
