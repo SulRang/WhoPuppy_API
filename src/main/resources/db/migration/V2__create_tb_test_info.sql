@@ -83,3 +83,46 @@ CREATE TABLE if NOT EXISTS  whopuppy.article_comment(
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )default character set utf8 collate utf8_general_ci;
+
+CREATE TABLE if NOT EXISTS whopuppy.report_type(
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    type VARCHAR(20) NOT NULL UNIQUE
+)default character set utf8 collate utf8_general_ci;
+
+CREATE TABLE if NOT EXISTS  whopuppy.report(
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    target_id BIGINT NOT NULL,
+    report_type_id BIGINT NOT NULL,
+    report_division_id TINYINT NOT NULL,
+    is_deleted TINYINT NOT NULL DEFAULT 0,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)default character set utf8 collate utf8_general_ci;
+
+CREATE TABLE if NOT EXISTS whopuppy.snack(
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    title VARCHAR(50),
+    content VARCHAR(5000),
+    thumbnail VARCHAR(255),
+    is_deleted TINYINT NOT NULL DEFAULT 0,
+    is_posted TINYINT NOT NULL DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)default character set utf8 collate utf8_general_ci;
+
+CREATE TABLE if NOT EXISTS  whopuppy.snack_comment(
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    snack_id BIGINT NOT NULL,
+    user_id BIGINT NOT NULL,
+    content VARCHAR(200) NOT NULL,
+    is_deleted TINYINT NOT NULL DEFAULT 0,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)default character set utf8 collate utf8_general_ci;
+
+CREATE TABLE if NOT EXISTS whopuppy.report_division(
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    division VARCHAR(30) NOT NULL UNIQUE
+)default character set utf8 collate utf8_general_ci;

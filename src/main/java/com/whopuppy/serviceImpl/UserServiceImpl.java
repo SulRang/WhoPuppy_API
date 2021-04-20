@@ -229,8 +229,8 @@ public class UserServiceImpl implements UserService {
         calendar.add(Calendar.MINUTE, 10); // 만료기한 10분
         authNumber.setExpired_at(new Timestamp( (calendar.getTime()).getTime()));
 
+        secret = "<#> 인증번호 [" + secret + "]\n" + authNumber.getCode();
         userMapper.setAuthNumber(authNumber);
-
         coolSmsUtil.singleSms(authNumber.getPhone_number(), secret);// sms 발송
 
         return "sms를 발송 했습니다.";

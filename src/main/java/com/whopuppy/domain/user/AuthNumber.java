@@ -32,6 +32,10 @@ AuthNumber {
     @NotNull( groups = ValidationGroups.configSms.class, message = "인증 키 값은 null일 수 없습니다.")
     private String secret;
 
+    @Size(min = 11, max = 11, groups = {  ValidationGroups.sendSms.class}, message =  "해쉬코드의 길이는 11자입니다.")
+    @NotNull( groups = {  ValidationGroups.sendSms.class}, message = "해쉬코드는 공백일 수 없습니다.")
+    private String code;
+
     @ApiModelProperty(hidden = true)
     private String ip;
     @ApiModelProperty(hidden = true)
@@ -41,6 +45,13 @@ AuthNumber {
     @ApiModelProperty(hidden = true)
     private Timestamp created_at;
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 
     public Long getId() {
         return id;
