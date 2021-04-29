@@ -41,7 +41,7 @@
 
 
     <select id="getImageUrls" resultType="com.whopuppy.domain.community.ArticleImage">
-        SELECT id, image_url FROM whopuppy.article_image WHERE article_id = #{id}
+        SELECT id, image_url FROM whopuppy.article_image WHERE article_id = #{id} and is_deleted = 0
     </select>
 
     <select id="getArticles" resultMap="whopuppy_article_resultMap">

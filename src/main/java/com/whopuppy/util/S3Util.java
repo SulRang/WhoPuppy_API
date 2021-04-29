@@ -49,7 +49,7 @@ public class S3Util {
                 .withCannedAcl(CannedAccessControlList.PublicRead)); // 퍼블릭 권한으로 버킷 + 날짜 디렉토리
 
         //return amazonS3.getUrl(bucket+ "/" + date,savedName).toString();
-        return customDomain + "/" + date + "/" + savedName;
+        return "https://" + customDomain + "/" + date + "/" + savedName;
     }
     public void deleteObject(String path,String savedName,boolean isHard) throws AmazonServiceException {
         if(isHard){ // 하드

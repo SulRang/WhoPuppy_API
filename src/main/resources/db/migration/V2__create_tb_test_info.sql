@@ -126,3 +126,12 @@ CREATE TABLE if NOT EXISTS whopuppy.report_division(
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     division VARCHAR(30) NOT NULL UNIQUE
 )default character set utf8 collate utf8_general_ci;
+
+CREATE TABLE if NOT EXISTS whopuppy.snack_image(
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    snack_id BIGINT NOT NULL,
+    image_url VARCHAR(255) NOT NULL,
+    is_posted TINYINT NOT NULL DEFAULT 0,
+    is_deleted TINYINT NOT NULL DEFAULT 0,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+)default character set utf8 collate utf8_general_ci;

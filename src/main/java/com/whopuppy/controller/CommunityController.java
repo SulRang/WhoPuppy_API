@@ -64,7 +64,7 @@ public class CommunityController {
     @Auth(authority = Auth.Authority.NONE, role = Auth.Role.NORMAL)
     @ApiOperation(value = "게시글 조회", notes = "Board_id와 지역에 따른 게시글 조회", authorizations = @Authorization(value = "Bearer +accessToken"))
     public ResponseEntity getArticles(@ModelAttribute ArticleCriteria articleCriteria) {
-        return new ResponseEntity(baseCommunity.getArticles( articleCriteria), HttpStatus.CREATED);
+        return new ResponseEntity(baseCommunity.getArticles( articleCriteria), HttpStatus.OK);
     }
 
     @Xss

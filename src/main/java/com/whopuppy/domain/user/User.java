@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.List;
@@ -19,15 +20,17 @@ public class User {
     @Size( min=6, max = 30,groups = { ValidationGroups.logIn.class,  ValidationGroups.signUp.class, ValidationGroups.accountCheck.class}, message = "아이디는 6글자에서 30글자입니다")
     @NotNull( groups = { ValidationGroups.logIn.class,  ValidationGroups.signUp.class, ValidationGroups.accountCheck.class}, message = "아이디는 공백일 수 없습니다.")
     private String account;
-    @Size( min=6, max = 20,groups = { ValidationGroups.logIn.class,  ValidationGroups.signUp.class, ValidationGroups.accountCheck.class}, message = "비밀번호는 6글자에서 20글자입니다")
+    @Size( min=32, max = 32,groups = { ValidationGroups.logIn.class,  ValidationGroups.signUp.class, ValidationGroups.accountCheck.class}, message = "비밀번호의 해쉬값은 32글자입니다")
     @NotNull(groups = {ValidationGroups.logIn.class, ValidationGroups.signUp.class, ValidationGroups.findPassword.class} , message = "패스워드는 비워둘 수 없습니다.")
     private String password;
 
     @NotNull(groups = {ValidationGroups.signUp.class, ValidationGroups.nicknameCheck.class}, message = "닉네임은 비워둘 수 없습니다.")
-    @Size(min=1 ,groups = {ValidationGroups.signUp.class, ValidationGroups.nicknameCheck.class}, message = "닉네임은 최소한 한글자 이상 입니다.")
+    @Size(min=1 , max= 20, groups = {ValidationGroups.signUp.class, ValidationGroups.nicknameCheck.class}, message = "닉네임은 1글자에서 20글자 사이입니다")
+    @Pattern(regexp = "^[a-zA-Z가-힣0-9]{1,20}$", message = "닉네임의 특수문자와 초성은 사용불가능합니다")
     private String nickname;
     @NotNull( groups =ValidationGroups.signUp.class, message = "번호는 필수입니다.")
     @Size( min=11, max = 11,groups =  ValidationGroups.signUp.class, message = "핸드폰번호는 11글자입니다.")
+    @Pattern(regexp = "^[0-9]{11}$", message = "핸드폰 번호는 숫자만 입력가능합니다")
     private String phone_number;
 
     @ApiModelProperty(hidden = true)

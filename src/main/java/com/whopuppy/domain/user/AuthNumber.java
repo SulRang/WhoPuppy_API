@@ -26,7 +26,7 @@ AuthNumber {
     @Min( value = 0,groups = { ValidationGroups.configSms.class,  ValidationGroups.sendSms.class}, message = "번호 인증의 flag는 0 보다 작을 수 없습니다.")
     @Max(value = 1,groups = { ValidationGroups.configSms.class,  ValidationGroups.sendSms.class}, message = "번호 인증의 flag는 1 보다 클 수 없습니다.")
     @Min( value = 1,groups = {ValidationGroups.authority.class}, message = "권한부여의 flag는 1 보다 작을 수 없습니다.")
-    @Max(value = 5,groups = { ValidationGroups.authority.class}, message = "권한부여의 flag는 5 보다 클 수 없습니다.")
+    @Max(value = 4,groups = { ValidationGroups.authority.class}, message = "권한부여의 flag는 4 보다 클 수 없습니다.")
     private Integer flag;
     @Size( min=6, max = 6,groups = ValidationGroups.configSms.class, message = "인증 키 값은 6글자입니다.")
     @NotNull( groups = ValidationGroups.configSms.class, message = "인증 키 값은 null일 수 없습니다.")

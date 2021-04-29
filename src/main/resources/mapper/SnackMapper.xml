@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.whopuppy.mapper.SnackMapper">
+    <select id="postTmpArticle" resultType="Long">
+        INSERT INTO whopuppy.snack(user_id) VALUES(#{user_id});
+        SELECT LAST_INSERT_ID();
+    </select>
+
+    <select id="uploadArticleImages" resultType="Long">
+        INSERT INTO whopuppy.snack_image(snack_id, image_url) VALUES(#{snack_id}, #{image_url});
+        SELECT LAST_INSERT_ID();
+    </select>
+
+    <select id="getTargetArticle" resultType="Long">
+        SELECT id FROM whopuppy.snack WHERE id = #{id}
+    </select>
+
+    <select id="getImageList" resultType="com.whopuppy.domain.snack.SnackImage">
+        SELECT id, image_url FROM whopuppy.snack_image WHERE snack_id = #{id} and is_deleted = 0
+    </select>
+
+    <update id="postArticle">
+        UPDATE whopuppy.snack SET title = #{snackArticle.title}, content = #{snackArticle.content} , thumbnail = #{snackArticle.thumbnail} , is_posted = 1 WHERE id = #{snackArticle.id};
+        <foreach collection="result" item="i" separator=";">
+            UPDATE whopuppy.snack_image
+            SET is_posted = 1
+            WHERE id = #{i.id}
+        </foreach>
+    </update>
+
+    <select id="getAllSnackArticles" resultType="com.whopuppy.domain.snack.SnackArticle">
+        SELECT
+        <include refid="whopuppy_snack">
+            <property name="alias" value="s."/>
+            <property name="prefix" value=""/>
+        </include>,
+        <include refid="whopuppy_snack_user">
+            <property name="alias" value="u."/>
+            <property name="prefix" value=""/>
+        </include>
+        FROM whopuppy.snack AS s
+        JOIN whopuppy.user AS u
+        ON s.user_id = u.id
+        WHERE s.is_deleted = 0 AND s.is_posted = 1
+        ORDER BY s.id DESC
+        LIMIT #{cursor}, #{limit};
+
+    </select>
+    <sql id ="whopuppy_snack">
+        ${alias}id AS ${prefix}id
+		,${alias}user_id AS ${prefix}user_id
+		,${alias}title AS ${prefix}title
+		,${alias}content AS ${prefix}content
+        ,${alias}thumbnail AS ${prefix}thumbnail
+        ,${alias}is_deleted AS ${prefix}is_deleted
+        ,${alias}is_posted AS ${prefix}is_posted
+        ,${alias}created_at AS ${prefix}created_at
+        ,${alias}updated_at AS ${prefix}updated_at
+    </sql>
+    <sql id="whopuppy_snack_user">
+        ${alias}profile_image_url AS ${prefix}profile_image_url
+		,${alias}nickname AS ${prefix}nickname
+    </sql>
+
+
+</mapper>

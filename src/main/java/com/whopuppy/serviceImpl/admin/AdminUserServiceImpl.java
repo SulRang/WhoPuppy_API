@@ -99,6 +99,8 @@ public class AdminUserServiceImpl extends UserServiceImpl implements AdminUserSe
                 return Auth.Authority.WANT_TAKE_ADOPT.toString();
             case 3:
                 return Auth.Authority.ADOPT_REVIEW.toString();
+            case 4:
+                return Auth.Authority.SNACK.toString();
             default:
                 // spring validation에서 체크가 되기 때문에 발생하지 않는 에러이다.
                 throw new RequestInputException(ErrorMessage.AUTHORITY_NOT_EXIST);

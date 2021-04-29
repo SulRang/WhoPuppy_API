@@ -12,9 +12,8 @@ public @interface Auth {
     // 루트, 관리자, 일반유저
     enum Role { ROOT, MANAGER, NORMAL }
 
-    // 유저 관리 권한, 분양해요 권한, 분양원해요 권한, 분양 후기 권한 관리자 권한 부역 권한
     // TODO 일반 유저 권한 = NONE
-    enum Authority { WANT_DO_ADOPT, WANT_TAKE_ADOPT, ADOPT_REVIEW, NONE }
+    enum Authority { WANT_DO_ADOPT, WANT_TAKE_ADOPT, ADOPT_REVIEW, SNACK, NONE }
 
     Role role() default Role.NORMAL;
     Authority authority() default Authority.NONE;
