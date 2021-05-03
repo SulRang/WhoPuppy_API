@@ -1,3 +1,5 @@
+CREATE SCHEMA IF NOT EXISTS whopuppy;
+
 CREATE TABLE if NOT EXISTS whopuppy.user(
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     account VARCHAR(50) NOT NULL UNIQUE,
@@ -122,6 +124,7 @@ CREATE TABLE if NOT EXISTS  whopuppy.snack_comment(
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )default character set utf8 collate utf8_general_ci;
 
+CREATE TABLE if NOT EXISTS whopuppy.report_division(
 CREATE TABLE if NOT EXISTS whopuppy.report_division(
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     division VARCHAR(30) NOT NULL UNIQUE

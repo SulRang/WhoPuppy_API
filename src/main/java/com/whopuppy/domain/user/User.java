@@ -20,7 +20,7 @@ public class User {
     @Size( min=6, max = 30,groups = { ValidationGroups.logIn.class,  ValidationGroups.signUp.class, ValidationGroups.accountCheck.class}, message = "아이디는 6글자에서 30글자입니다")
     @NotNull( groups = { ValidationGroups.logIn.class,  ValidationGroups.signUp.class, ValidationGroups.accountCheck.class}, message = "아이디는 공백일 수 없습니다.")
     private String account;
-    @Size( min=32, max = 32,groups = { ValidationGroups.logIn.class,  ValidationGroups.signUp.class, ValidationGroups.accountCheck.class}, message = "비밀번호의 해쉬값은 32글자입니다")
+    //@Size( min=64, max = 64,groups = { ValidationGroups.logIn.class,  ValidationGroups.signUp.class, ValidationGroups.accountCheck.class}, message = "비밀번호의 해쉬값은 64글자입니다")
     @NotNull(groups = {ValidationGroups.logIn.class, ValidationGroups.signUp.class, ValidationGroups.findPassword.class} , message = "패스워드는 비워둘 수 없습니다.")
     private String password;
 
