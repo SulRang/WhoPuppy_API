@@ -20,10 +20,17 @@ public class User {
     @Size( min=6, max = 30,groups = { ValidationGroups.logIn.class,  ValidationGroups.signUp.class, ValidationGroups.accountCheck.class}, message = "아이디는 6글자에서 30글자입니다")
     @NotNull( groups = { ValidationGroups.logIn.class,  ValidationGroups.signUp.class, ValidationGroups.accountCheck.class}, message = "아이디는 공백일 수 없습니다.")
     private String account;
-    //@Size( min=64, max = 64,groups = { ValidationGroups.logIn.class,  ValidationGroups.signUp.class, ValidationGroups.accountCheck.class}, message = "비밀번호의 해쉬값은 64글자입니다")
+
+    @Size( min=64, max = 64,groups = { ValidationGroups.logIn.class,  ValidationGroups.signUp.class, ValidationGroups.accountCheck.class}, message = "비밀번호의 해쉬값은 64글자입니다")
     @NotNull(groups = {ValidationGroups.logIn.class, ValidationGroups.signUp.class, ValidationGroups.findPassword.class} , message = "패스워드는 비워둘 수 없습니다.")
     private String password;
 
+    @NotNull(groups = {ValidationGroups.signUp.class ,ValidationGroups.findPassword.class }, message = "인증번호는 비워질 수 없습니다")
+    @Size(min=6 , max= 6, groups = {ValidationGroups.signUp.class, ValidationGroups.findPassword.class}, message = "인증번호는 6글자입니다")
+    @Pattern(regexp = "^[0-9]{6}$", message = "인증번호는 숫자만 가능합니다")
+    private String secret;
+    
+    
     @NotNull(groups = {ValidationGroups.signUp.class, ValidationGroups.nicknameCheck.class}, message = "닉네임은 비워둘 수 없습니다.")
     @Size(min=1 , max= 20, groups = {ValidationGroups.signUp.class, ValidationGroups.nicknameCheck.class}, message = "닉네임은 1글자에서 20글자 사이입니다")
     @Pattern(regexp = "^[a-zA-Z가-힣0-9]{1,20}$", message = "닉네임의 특수문자와 초성은 사용불가능합니다")
@@ -47,6 +54,14 @@ public class User {
     private Timestamp created_at;
     @ApiModelProperty(hidden = true)
     private Timestamp updated_at;
+
+    public String getSecret() {
+        return secret;
+    }
+
+    public void setSecret(String secret) {
+        this.secret = secret;
+    }
 
     public Long getId() {
         return id;

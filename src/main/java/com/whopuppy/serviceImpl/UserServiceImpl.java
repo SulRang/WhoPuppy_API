@@ -94,6 +94,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void signUp(User user) throws Exception{
 
+
         // 닉네임 null,중복 체크
         if (user.getNickname() != null) {
             if (userMapper.getUserByNickName(user.getNickname() ) != null ) {
@@ -107,11 +108,15 @@ public class UserServiceImpl implements UserService {
         }
 
         // 번호인증을 했는가?
-        List<AuthNumber> list = userMapper.getAuthTrue(user.getAccount(),0, user.getPhone_number());
-        if ( list.size() == 0){
+        AuthNumber dbValue = userMapper.getAuthTrue(user.getAccount(),0, user.getPhone_number());
+        if (dbValue == null){
             throw new RequestInputException(ErrorMessage.SMS_NONE_AUTH_EXCEPTION);
         }
 
+        // 번호인증의 secret값이 맞는가 ?
+        if ( !dbValue.getSecret().equals(user.getSecret()) ) {
+            throw new RequestInputException(ErrorMessage.SMS_SECRET_INVALID_EXCEPTION);
+        }
 
         // 비밀번호 암호화
         user.setPassword( BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()) );
@@ -125,7 +130,6 @@ public class UserServiceImpl implements UserService {
         // 회원가입 완료 시  phoneNumber, flag, ip가 같은 이전 이력은 모두 만료 + soft delete 시킴
         AuthNumber authNumber = new AuthNumber();
         authNumber.setIp(this.getClientIp());
-        authNumber.setAccount(user.getAccount());
         authNumber.setPhone_number(user.getPhone_number());
         authNumber.setFlag(0); // 회원가입 인증
         Calendar calendar = Calendar.getInstance();
@@ -151,16 +155,15 @@ public class UserServiceImpl implements UserService {
     // 문자 발송
     @Override
     public String sendSms(AuthNumber authNumber) throws Exception{
+
+
+        // 와이파이가 중간에 끊겼을 경우 ip 체크는 문제가 될수있다
+        // 게정의 회원이 있는지 없는지는 폰번호로 하는 것이 올바륻 ㅏ.
         System.out.println(this.getClientIp());
         if ( authNumber.getFlag() == 0 ){ // 회원가입 발송
-            Long id = userMapper.getUserIdFromPhoneNumber(authNumber.getPhone_number()); //아이디로 검색
+            Long id = userMapper.getUserIdFromPhoneNumber(authNumber.getPhone_number()); // 폰번호 검색
             if (id != null) { // 가입한 아이디라면
                 throw new RequestInputException(ErrorMessage.SMS_ALREADY_AUTHED); // 이미 가입했다는 에러 발생
-            }
-            // 이미 가입된 계정이름인지 체크
-            User dbUser = userMapper.getUserIdFromAccount(authNumber.getAccount());
-            if ( dbUser !=null ){
-                throw new RequestInputException(ErrorMessage.ACCOUNT_ALREADY_SIGNED_UP);
             }
         }
 
@@ -168,11 +171,6 @@ public class UserServiceImpl implements UserService {
         if (authNumber.getFlag() == 1) {
             Long id = userMapper.getUserIdFromPhoneNumber(authNumber.getPhone_number());
             if (id == null) {
-                throw new RequestInputException(ErrorMessage.NO_USER_EXCEPTION);
-            }
-            // 이미 가입된 계정이름인지 체크
-            User dbUser = userMapper.getUserIdFromAccount(authNumber.getAccount());
-            if ( dbUser ==null ){
                 throw new RequestInputException(ErrorMessage.NO_USER_EXCEPTION);
             }
         }
@@ -201,10 +199,10 @@ public class UserServiceImpl implements UserService {
         userMapper.expirePastAuthNumber(authNumber);
 
 
-        // account, phone Number, flag, ip가 같은 모든 secret 조회
-        List<String> secretHistory = userMapper.getAllAuthHistory(authNumber);
-
         // TODO :: OPTIONAL get random string for secret String without duplicate in same User
+        /*
+        // account, phone Number, flag, ip가 같은 모든 secret 조회
+        List<String> secretHistory = userMapper.getAllAuthHistory(authNumber)
         String secret = "";
         boolean check = false;
         while(true) {
@@ -220,6 +218,15 @@ public class UserServiceImpl implements UserService {
             if( !check ){ // 중복되는 값이 없다면 ( false 라면 )
                 break; // 루프탈출
             }
+        }
+         */
+
+
+        // 6자리의 랜덤숫자열 생성
+        String secret = "";
+        Random rnd = new Random();
+        for (int i = 0; i < 6; i++) {
+            secret += rnd.nextInt(10);// 글자의 random numbers
         }
 
         //db에 전송 이력을 저장
@@ -237,14 +244,10 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public String configSms(AuthNumber authNumber) throws Exception{
-        System.out.println(this.getClientIp());
+
+        // 와이파이가 중간에 끊겼을 경우 ip 체크는 문제가 될수있다
         //회원가입 요청이라면
         if (authNumber.getFlag() == 0) {
-            // 이미 가입된 계정이름인지 체크
-            User dbUser = userMapper.getUserIdFromAccount(authNumber.getAccount());
-            if ( dbUser !=null ){
-                throw new RequestInputException(ErrorMessage.ACCOUNT_ALREADY_SIGNED_UP);
-            }
             // 이미 가입된 번호인지 체크
             Long id = userMapper.getUserIdFromPhoneNumber(authNumber.getPhone_number());
             if (id != null) {
@@ -253,34 +256,28 @@ public class UserServiceImpl implements UserService {
         }
         //비밀번호 찾기 요청이라면,
         if (authNumber.getFlag() == 1) {
-            // 이미 가입된 계정이름인지 체크
-            User dbUser = userMapper.getUserIdFromAccount(authNumber.getAccount());
-            if ( dbUser ==null ){
-                throw new RequestInputException(ErrorMessage.ACCOUNT_ALREADY_SIGNED_UP);
-            }
             //가입한 아이디가 없다면
             Long id = userMapper.getUserIdFromPhoneNumber(authNumber.getPhone_number());
             if (id == null) {
                 throw new RequestInputException(ErrorMessage.NO_USER_EXCEPTION);
             }
         }
+
         //account, flag, phoneNumber 값으로 select 해옴
-        List<AuthNumber> list = userMapper.getSecret(authNumber);
+        // 폰넘버 flag -- select하는게 맞는것같다
+        AuthNumber dbValue= userMapper.getSecret(authNumber);
 
         //문자를 보낸적 없다면 email인증을 신청하라고 알림
-        if (list.size() == 0){
+        if (dbValue == null ){
             throw new RequestInputException(ErrorMessage.SMS_NONE_AUTH_EXCEPTION);
         }
 
         //request secret값이 일치하는지 확인
         AuthNumber dbAuthNumber = null;
-        String ip = this.getClientIp();
-        for(int i=0;i<list.size();i++){
-            if ( authNumber.getSecret().equals(list.get(i).getSecret()) && ip.equals(list.get(i).getIp())){
-                dbAuthNumber = list.get(i);
-                break;
-            }
+        if ( dbValue.getSecret().equals(authNumber.getSecret())){
+            dbAuthNumber = dbValue;
         }
+
         // secret 값이 다르다면 인증번호를 확인하라는 알림
         if ( dbAuthNumber == null){
             throw new RequestInputException(ErrorMessage.SMS_SECRET_INVALID_EXCEPTION);
@@ -319,10 +316,14 @@ public class UserServiceImpl implements UserService {
             throw new RequestInputException(ErrorMessage.NO_USER_EXCEPTION);
         }
 
-        //이메일 인증 여부 체크
-        List<AuthNumber> list = userMapper.getAuthTrue(user.getAccount(),1, user.getPhone_number());
-        if ( list.size() == 0){
+        //번호 인증 여부 체크
+        AuthNumber dbValue = userMapper.getAuthTrue(user.getAccount(),1, user.getPhone_number());
+        if ( dbValue == null ){
             throw new RequestInputException(ErrorMessage.SMS_NONE_AUTH_EXCEPTION);
+        }
+        // 인증번호가 틀렸는지 확인
+        if ( !dbValue.getSecret().equals(user.getSecret())){
+            throw new RequestInputException(ErrorMessage.SMS_SECRET_INVALID_EXCEPTION);
         }
 
         // 비밀번호 암호화
@@ -332,7 +333,6 @@ public class UserServiceImpl implements UserService {
         // 비밀번호 찾기 완료 시  phoneNumber, flag, ip가 같은 이전 이력은 모두 만료 + soft delete 시킴
         AuthNumber authNumber = new AuthNumber();
         authNumber.setIp(this.getClientIp());
-        authNumber.setAccount(user.getAccount());
         authNumber.setPhone_number(user.getPhone_number());
         authNumber.setFlag(1); // 비밀번호 찾기 인증
         Calendar calendar = Calendar.getInstance();

@@ -12,8 +12,8 @@
     </select>
 
     <insert id="setAuthNumber">
-        INSERT INTO whopuppy.auth(account,phone_number,flag,secret,ip,expired_at)
-        VALUES (#{account}, #{phone_number},#{flag},#{secret},#{ip}, #{expired_at} )
+        INSERT INTO whopuppy.auth(phone_number,flag,secret,ip,expired_at)
+        VALUES ( #{phone_number},#{flag},#{secret},#{ip}, #{expired_at} )
     </insert>
     <delete id="deleteAllAuthNumber">
         DELETE FROM whopuppy.auth WHERE flag = #{flag} and phone_number = #{phone_number}
@@ -22,16 +22,16 @@
     <select id="getSecret" resultType="com.whopuppy.domain.user.AuthNumber">
         SELECT id, secret,flag, expired_at,ip
         FROM whopuppy.auth
-        WHERE account = #{account} and flag = #{flag} and phone_number = #{phone_number} and is_deleted = 0
+        WHERE flag = #{flag} and phone_number = #{phone_number} and is_deleted = 0 ORDER BY id DESC LIMIT 1
     </select>
 
     <update id="setIs_authed">
         UPDATE whopuppy.auth   SET is_authed = #{is_authed} WHERE id=#{id}
     </update>
     <select id="getAuthTrue" resultType="com.whopuppy.domain.user.AuthNumber">
-        SELECT id, is_authed
+        SELECT id, secret,is_authed
         FROM whopuppy.auth
-        WHERE is_authed = 1 and account =#{account} and flag=#{flag} and phone_number = #{phone_number} and is_deleted = 0
+        WHERE is_authed = 1 and flag=#{flag} and phone_number = #{phone_number} and is_deleted = 0 ORDER BY id DESC LIMIT 1
     </select>
     <select id="getUserByNickName" resultType="String">
         SELECT nickname FROM whopuppy.user WHERE nickname = #{nickname}
@@ -44,7 +44,7 @@
 
     <select id="getAllAuthHistory" resultType="String">
         SELECT secret FROM whopuppy.auth
-        WHERE account = #{account} and flag = #{flag} and ip = #{ip} and phone_number = #{phone_number} and is_deleted = 0
+        WHERE flag = #{flag} and ip = #{ip} and phone_number = #{phone_number} and is_deleted = 0
     </select>
 
     <insert id="signUp">

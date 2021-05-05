@@ -1,0 +1,1 @@
+ALTER TABLE whopuppy.auth DROP COLUMN account;

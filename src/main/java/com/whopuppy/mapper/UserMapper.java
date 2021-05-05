@@ -16,9 +16,9 @@ public interface UserMapper {
     String getUserByNickName(String nickname);
     String getSalt(Long id);
     void setAuthNumber(AuthNumber authNumber);
-    List<AuthNumber> getSecret(AuthNumber authNumber);
+    AuthNumber getSecret(AuthNumber authNumber);
     void setIs_authed(boolean is_authed,Long id);
-    List<AuthNumber> getAuthTrue(String account, Integer flag, String phone_number);
+    AuthNumber getAuthTrue(String account, Integer flag, String phone_number);
     void passwordUpdate(User user);
     void expirePastAuthNumber(AuthNumber authNumber);
     User getUserIdFromAccount(String account);
