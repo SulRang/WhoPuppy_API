@@ -69,16 +69,21 @@ public class JwtUtil {
             return null;
          */
         String authToken = "";
+
         if ( token == null && flag == 1 ) { // refresh token이 null로 요청된 경우
             throw new RefreshTokenInvalidException(ErrorMessage.REFRESH_FORBIDDEN_AUTH_INVALID_EXCEPTION);
         }
-        else if ( !token.startsWith("Bearer ") && flag == 0  ) { // access token의 길이가 8보다 작은 경우
+        else if ( token == null && flag == 0 ){// access token이 null로 요청된 경우
             throw new AccessTokenInvalidException(ErrorMessage.ACCESS_FORBIDDEN_AUTH_INVALID_EXCEPTION);
         }
-        else if ( !token.startsWith("Bearer ") && flag == 1){ // refresh toekn의 길이가 8보다 작은 경우
+        else if ( !token.startsWith("Bearer ") && flag == 0  ) { // access token이 Bearer로 시작하지 않는  경우
+            throw new AccessTokenInvalidException(ErrorMessage.ACCESS_FORBIDDEN_AUTH_INVALID_EXCEPTION);
+        }
+        else if ( !token.startsWith("Bearer ") && flag == 1){ // refresh toekn이 Bearer로 시작하지 않는  경우
             throw new RefreshTokenInvalidException(ErrorMessage.REFRESH_FORBIDDEN_AUTH_INVALID_EXCEPTION);
         }
         else{ // 여기서도 String index bound exception이 발생할 수 있었다.
+            // 전부 만족하는 경우
             authToken = token.substring(7); // "Bearer " 제거
         }
         Map<String,Object> payloads = this.validateFormat(authToken,flag);

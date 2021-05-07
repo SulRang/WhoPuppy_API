@@ -43,8 +43,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 
         else if ( auth != null ) {// auth 어노테이션이 있다면
             String accessToken = request.getHeader("Authorization");
-            if ( accessToken == null)
-                throw new AccessTokenInvalidException(ErrorMessage.ACCESS_FORBIDDEN_AUTH_INVALID_EXCEPTION);
+
             int result = jwt.isValid(accessToken, 0); // flag 0 -> access / 1 refresh
 
             if (result == 0) { // access token이며 valid 하다면
