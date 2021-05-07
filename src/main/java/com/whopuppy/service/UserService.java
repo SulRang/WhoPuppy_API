@@ -20,5 +20,5 @@ public interface UserService {
     String accountCheck(String account);
     String setProfile(MultipartFile multipartFile)throws Exception;
     Long getLoginUserId();
-
+    User getMe(String token);
 }

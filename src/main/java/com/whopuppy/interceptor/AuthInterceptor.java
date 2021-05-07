@@ -32,12 +32,15 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
         if (!(handler instanceof HandlerMethod)) return true;
 
         HandlerMethod handlerMethod = (HandlerMethod) handler;
+
+
         Auth auth= handlerMethod.getMethod().getDeclaredAnnotation(Auth.class); // 메소드의 어노테이션
         // Auth auth = handlerMethod.getMethod().getDeclaringClass().getAnnotation(Auth.class); // 클래스의 어노테이션
 
         if ( auth == null){ // auth annotation 이 없다면
             return true;
         }
+
         else if ( auth != null ) {// auth 어노테이션이 있다면
             String accessToken = request.getHeader("Authorization");
             if ( accessToken == null)

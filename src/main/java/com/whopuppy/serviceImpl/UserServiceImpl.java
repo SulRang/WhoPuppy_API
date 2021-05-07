@@ -380,11 +380,16 @@ public class UserServiceImpl implements UserService {
     public User getMe(){
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String token = request.getHeader(accessTokenName);
+        return getMe(token);
+    }
+
+    @Override
+    public User getMe(String token){
         if ( token == null){
             return null;
         }
-        else {
-            if ( jwtUtil.isValid(token,0) ==0 ) {
+        else{
+            if ( jwtUtil.isValid(token,0) ==0  ){
                 Map<String, Object> payloads = jwtUtil.validateFormat(token, 0);
                 Long id = Long.valueOf(String.valueOf(payloads.get("id")));
                 return userMapper.getMe(id);
@@ -394,6 +399,7 @@ public class UserServiceImpl implements UserService {
             }
         }
     }
+
     @Override
     public String setProfile(MultipartFile multipartFile)throws Exception{
         // multipartfile이 null인 경우
