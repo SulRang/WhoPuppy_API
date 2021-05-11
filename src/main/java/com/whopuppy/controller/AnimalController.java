@@ -42,7 +42,7 @@ public class AnimalController {
 
 
     @PostMapping("/callAnimal")
-    public String callAnimallist(@RequestParam Integer days, @RequestParam String page, @RequestParam String rows) throws IOException, ParseException {
+    public String callAnimalList(@RequestParam Integer days, @RequestParam String page, @RequestParam String rows) throws IOException, ParseException {
         byte[] bytes;
 
         Calendar cal = Calendar.getInstance();
