@@ -23,4 +23,6 @@ public final class ValidationGroups {
     public interface authority extends Default{};
     public interface postCommunity extends Default{};
     public interface postComment extends Default{};
+    public interface animalComment extends Default{};
+    public interface animalList extends Default{};
 }

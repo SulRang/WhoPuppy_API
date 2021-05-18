@@ -1,5 +1,6 @@
 package com.whopuppy.serviceImpl;
 
+import com.amazonaws.services.dynamodbv2.xspec.NULL;
 import com.whopuppy.domain.CommentDTO;
 import com.whopuppy.mapper.CommentMapper;
 import com.whopuppy.service.CommentService;
@@ -15,52 +16,47 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private CommentMapper commentMapper;
 
-
     @Override
-    public CommentDTO createComment(Long board_id, String content, String writer)throws Exception{
-        CommentDTO commentDTO = new CommentDTO();
-        commentDTO.setBoard_id(board_id);
-        commentDTO.setContent(content);
-        commentDTO.setWriter(writer);
-        return commentDTO;
+    public String registerComment(CommentDTO commentDTO) throws Exception{
+        int queryResult = 0;
+        queryResult = commentMapper.insertComment(commentDTO);
+
+        return (queryResult == 1) ? "댓글이 작성되었습니다." : "댓글 작성에 실패했습니다.";
     }
 
     @Override
-    public boolean registerComment(CommentDTO params) throws Exception{
+    public String updateComment(CommentDTO commentDTO, Long id) throws Exception{
         int queryResult = 0;
 
-        if (params.getComment_id() == null) {
-            queryResult = commentMapper.insertComment(params);
-        } else {
-            queryResult = commentMapper.updateComment(params);
+        if (commentMapper.isCommentCreated(id) == null) {
+            queryResult = commentMapper.updateComment(commentDTO, id);
         }
 
-        return (queryResult == 1) ? true : false;
+        return (queryResult == 1) ? "댓글이 수정되었습니다." : "댓글 수정에 실패했습니다.";
     }
-
     @Override
-    public boolean deleteComment(Long comment_id) throws Exception{
+    public String deleteComment(Long id) throws Exception{
         int queryResult = 0;
 
-        CommentDTO commentDTO = commentMapper.selectCommentDetail(comment_id);
+        CommentDTO commentDTO = commentMapper.selectCommentDetail(id);
 
-        if (commentDTO != null && "N".equals(commentDTO.getDeleteYn())) {
-            queryResult = commentMapper.deleteComment(comment_id);
+        if (commentDTO != null && "N".equals(commentDTO.getIs_deleted())) {
+            queryResult = commentMapper.deleteComment(id);
         }
         else
             throw new Exception();
 
 
-        return (queryResult == 1) ? true : false;
+        return "댓글이 삭제되었습니다.";
     }
 
     @Override
-    public List<CommentDTO> getCommentList(Long board_idx) throws Exception{
+    public List<CommentDTO> getCommentList(Long article_id) throws Exception{
         List<CommentDTO> commentList = Collections.emptyList();
 
-        int commentTotalCount = commentMapper.selectCommentTotalCount(board_idx);
+        int commentTotalCount = commentMapper.selectCommentTotalCount(article_id);
         if (commentTotalCount > 0) {
-            commentList = commentMapper.selectCommentList(board_idx);
+            commentList = commentMapper.selectCommentList(article_id);
         }
         else
             throw new Exception();

@@ -1,45 +1,42 @@
 package com.whopuppy.controller;
 
+import com.whopuppy.annotation.ValidationGroups;
 import com.whopuppy.domain.CommentDTO;
+import com.whopuppy.response.BaseResponse;
 import com.whopuppy.service.CommentService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 @RestController
+@RequestMapping(value = "/comment")
 public class CommentController {
 
     @Resource
     private CommentService commentService;
 
-    @PostMapping("/insertcomment")
-    public String commentInsert(@RequestParam Long board_id, @RequestParam String content, @RequestParam String writer) throws Exception {
-        CommentDTO commentDTO = new CommentDTO();
-        commentDTO.setBoard_id(board_id);
-        commentDTO.setContent(content);
-        commentDTO.setWriter(writer);
+    @RequestMapping(value = "/registration" , method = RequestMethod.POST)
+    public ResponseEntity commentInsert(@RequestBody @Validated(ValidationGroups.animalComment.class) CommentDTO commentDTO) throws Exception {
         commentService.registerComment(commentDTO);
-        return "Insert Comment test " + commentDTO.getContent();
+        return new ResponseEntity(new BaseResponse(commentDTO.getContent(), HttpStatus.CREATED), HttpStatus.OK);
     }
-    @PostMapping("/readcomment")
-    public List<CommentDTO> CommentReadTest(@RequestParam Long board_id) throws Exception {
-        return commentService.getCommentList(board_id);
+
+    @RequestMapping(value = "/list" , method = RequestMethod.POST)
+    public ResponseEntity commentRead(@RequestParam Long article_id) throws Exception {
+        return new ResponseEntity(commentService.getCommentList(article_id), HttpStatus.CREATED);
     }
-    @PostMapping("/updatecomment")
-    public String CommentUpdateTest(@RequestParam Long comment_id,@RequestParam Long board_id,@RequestParam String content, @RequestParam String writer) throws Exception {
-        CommentDTO commentDTO = new CommentDTO();
-        commentDTO.setComment_id(comment_id);
-        commentDTO.setBoard_id(board_id);
-        commentDTO.setContent(content);
-        commentDTO.setWriter(writer);
-        return "Update Comment test : " + commentService.registerComment(commentDTO);
+
+    @RequestMapping(value = "/update/{id}" , method = RequestMethod.POST)
+    public ResponseEntity commentUpdate(@RequestBody @Validated(ValidationGroups.animalComment.class) CommentDTO commentDTO, @PathVariable Long id) throws Exception {
+        return new ResponseEntity(new BaseResponse(commentService.updateComment(commentDTO, id), HttpStatus.OK), HttpStatus.OK);
     }
-    @PostMapping(value = "/removecomment")
-    public String CommentDeleteTest(@RequestParam Long comment_id) throws Exception{
-        return "Delete Comment test : " + commentService.deleteComment(comment_id);
+
+    @RequestMapping(value = "/deletion/{id}" , method = RequestMethod.POST)
+    public ResponseEntity commentDelete(@PathVariable Long id) throws Exception{
+        return new ResponseEntity(new BaseResponse(commentService.deleteComment(id), HttpStatus.OK), HttpStatus.OK);
     }
 
 }

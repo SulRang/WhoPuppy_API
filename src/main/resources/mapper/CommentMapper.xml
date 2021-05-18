@@ -3,14 +3,14 @@
 <mapper namespace="com.whopuppy.mapper.CommentMapper">
 
     <sql id="commentColumns">
-        board_idx
+        article_id
 		, content
-		, writer
+		, user_id
     </sql>
 
     <insert id="insertComment">
-        INSERT INTO whopuppy.animal_comment (board_idx, content, writer )
-        VALUES (#{board_id}, #{content}, #{writer})
+        INSERT INTO whopuppy.animal_comment (article_id, content, user_id )
+        VALUES (#{article_id}, #{content}, #{user_id})
     </insert>
 
     <select id="selectCommentDetail" parameterType="long" resultType="com.whopuppy.domain.CommentDTO">
@@ -19,42 +19,41 @@
         FROM
         animal_comment
         WHERE
-        delete_yn = 'N'
+        is_deleted = 0
         AND
-        idx = #{comment_id}
+        id = #{id}
     </select>
 
     <update id="updateComment" parameterType="com.whopuppy.domain.CommentDTO">
         UPDATE animal_comment
         SET
-            update_time = NOW()
+            updated_at = NOW()
           , content = #{content}
-          , writer = #{writer}
+          , user_id = #{user_id}
         WHERE
-            idx = #{comment_id}
+            id = #{id}
     </update>
 
     <update id="deleteComment" parameterType="long">
         UPDATE animal_comment
         SET
-            delete_yn = 'Y'
-          , delete_time = NOW()
+            is_deleted = 1
         WHERE
-            idx = #{comment_id}
+            id = #{id}
     </update>
 
     <select id="selectCommentList" parameterType="long" resultType="com.whopuppy.domain.CommentDTO">
         SELECT
-        <include refid="commentColumns" />
+        *
         FROM
         whopuppy.animal_comment
         WHERE
-        delete_yn = 'N'
+        is_deleted = 0
         AND
-        board_idx = #{board_id}
+        article_id = #{article_id}
         ORDER BY
-        idx DESC,
-        insert_time DESC
+        id DESC,
+        created_at DESC
     </select>
 
     <select id="selectCommentTotalCount" parameterType="long" resultType="int">
@@ -63,9 +62,20 @@
         FROM
             animal_comment
         WHERE
-            delete_yn = 'N'
+            is_deleted = 0
           AND
-            board_idx = #{board_id}
+            article_id = #{article_id}
+    </select>
+
+    <select id="isCommentCreated" resultType="Long">
+        SELECT
+            id
+        FROM
+            animal_comment
+        WHERE
+            id = #{id}
+          AND
+            is_deleted = 0;
     </select>
 
 </mapper>

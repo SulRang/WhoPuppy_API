@@ -9,9 +9,9 @@ import java.util.List;
 public interface CommentMapper {
     Integer insertComment(CommentDTO commentDTO);
     CommentDTO selectCommentDetail(Long comment_id);
-    Integer updateComment(CommentDTO commentDTO);
+    Integer updateComment(CommentDTO commentDTO, Long id);
     Integer deleteComment(Long comment_id);
     List<CommentDTO> selectCommentList(Long board_idx);
     Integer selectCommentTotalCount(Long board_idx);
-    Integer getAuthUserList(String[] userArray);
+    Long isCommentCreated(Long id);
 }

@@ -6,12 +6,12 @@ import java.util.List;
 
 public interface CommentService {
 
-    CommentDTO createComment(Long board_id, String content, String writer)throws Exception;
+    String registerComment(CommentDTO commentDTO)throws Exception;
 
-    boolean registerComment(CommentDTO params)throws Exception;
+    String updateComment(CommentDTO commentDTO, Long id)throws Exception;
 
-    boolean deleteComment(Long comment_id)throws Exception;
+    String deleteComment(Long id)throws Exception;
 
-    List<CommentDTO> getCommentList(Long params)throws Exception;
+    List<CommentDTO> getCommentList(Long article_id)throws Exception;
 
 }
