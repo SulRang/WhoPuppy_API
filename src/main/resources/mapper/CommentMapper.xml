@@ -14,68 +14,36 @@
     </insert>
 
     <select id="selectCommentDetail" parameterType="long" resultType="com.whopuppy.domain.CommentDTO">
-        SELECT
-        *
-        FROM
-        animal_comment
-        WHERE
-        is_deleted = 0
-        AND
-        id = #{id}
+        SELECT *  FROM animal_comment
+        WHERE is_deleted = 0 AND id = #{id}
     </select>
 
     <update id="updateComment" parameterType="com.whopuppy.domain.CommentDTO">
         UPDATE animal_comment
-        SET
-            updated_at = NOW()
-          , content = #{content}
-          , user_id = #{user_id}
-        WHERE
-            id = #{id}
+        SET updated_at = NOW() , content = #{content} , user_id = #{user_id}
+        WHERE  id = #{id}
     </update>
 
     <update id="deleteComment" parameterType="long">
         UPDATE animal_comment
-        SET
-            is_deleted = 1
-        WHERE
-            id = #{id}
+        SET is_deleted = 1
+        WHERE id = #{id}
     </update>
 
     <select id="selectCommentList" parameterType="long" resultType="com.whopuppy.domain.CommentDTO">
-        SELECT
-        *
-        FROM
-        whopuppy.animal_comment
-        WHERE
-        is_deleted = 0
-        AND
-        article_id = #{article_id}
-        ORDER BY
-        id DESC,
-        created_at DESC
+        SELECT * FROM whopuppy.animal_comment
+        WHERE is_deleted = 0 AND article_id = #{article_id}
+        ORDER BY id DESC, created_at DESC
     </select>
 
     <select id="selectCommentTotalCount" parameterType="long" resultType="int">
-        SELECT
-            COUNT(*)
-        FROM
-            animal_comment
-        WHERE
-            is_deleted = 0
-          AND
-            article_id = #{article_id}
+        SELECT COUNT(*) FROM animal_comment
+        WHERE is_deleted = 0 AND article_id = #{article_id}
     </select>
 
     <select id="isCommentCreated" resultType="Long">
-        SELECT
-            id
-        FROM
-            animal_comment
-        WHERE
-            id = #{id}
-          AND
-            is_deleted = 0;
+        SELECT id FROM animal_comment
+        WHERE  id = #{id} AND is_deleted = 0;
     </select>
 
 </mapper>

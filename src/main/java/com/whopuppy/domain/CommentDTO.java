@@ -36,14 +36,12 @@ public class CommentDTO {
 
     public Long getId(){ return id;}
 
-    @ApiModelProperty(hidden = true)
     public Long getArticle_id(){ return article_id;}
 
     public Long getUser_id(){ return user_id;}
 
     public String getContent(){ return content;}
 
-    @ApiModelProperty(hidden = true)
     public Boolean getIs_deleted() { return is_deleted; }
 
     public Timestamp getCreated_at() {return created_at;}

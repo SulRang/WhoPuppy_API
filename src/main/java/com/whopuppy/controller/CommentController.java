@@ -4,6 +4,7 @@ import com.whopuppy.annotation.ValidationGroups;
 import com.whopuppy.domain.CommentDTO;
 import com.whopuppy.response.BaseResponse;
 import com.whopuppy.service.CommentService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,23 +19,27 @@ public class CommentController {
     @Resource
     private CommentService commentService;
 
-    @RequestMapping(value = "/registration" , method = RequestMethod.POST)
+    @PostMapping
+    @ApiOperation(value = "댓글 작성", notes = "댓글 작성")
     public ResponseEntity commentInsert(@RequestBody @Validated(ValidationGroups.animalComment.class) CommentDTO commentDTO) throws Exception {
         commentService.registerComment(commentDTO);
-        return new ResponseEntity(new BaseResponse(commentDTO.getContent(), HttpStatus.CREATED), HttpStatus.OK);
+        return new ResponseEntity(new BaseResponse(commentDTO.getContent(), HttpStatus.CREATED), HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/list" , method = RequestMethod.POST)
+    @GetMapping
+    @ApiOperation(value = "댓글 조회", notes = "댓글 조회")
     public ResponseEntity commentRead(@RequestParam Long article_id) throws Exception {
-        return new ResponseEntity(commentService.getCommentList(article_id), HttpStatus.CREATED);
+        return new ResponseEntity(commentService.getCommentList(article_id), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/update/{id}" , method = RequestMethod.POST)
+    @PutMapping(value = "/{id}")
+    @ApiOperation(value = "댓글 수정", notes = "댓글 수정")
     public ResponseEntity commentUpdate(@RequestBody @Validated(ValidationGroups.animalComment.class) CommentDTO commentDTO, @PathVariable Long id) throws Exception {
         return new ResponseEntity(new BaseResponse(commentService.updateComment(commentDTO, id), HttpStatus.OK), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/deletion/{id}" , method = RequestMethod.POST)
+    @DeleteMapping(value = "/{id}")
+    @ApiOperation(value = "댓글 삭제", notes = "댓글 삭제")
     public ResponseEntity commentDelete(@PathVariable Long id) throws Exception{
         return new ResponseEntity(new BaseResponse(commentService.deleteComment(id), HttpStatus.OK), HttpStatus.OK);
     }
