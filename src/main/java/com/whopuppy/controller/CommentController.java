@@ -2,8 +2,10 @@ package com.whopuppy.controller;
 
 import com.whopuppy.annotation.ValidationGroups;
 import com.whopuppy.domain.CommentDTO;
+import com.whopuppy.domain.criteria.CommentCriteria;
 import com.whopuppy.response.BaseResponse;
 import com.whopuppy.service.CommentService;
+
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +30,8 @@ public class CommentController {
 
     @GetMapping
     @ApiOperation(value = "댓글 조회", notes = "댓글 조회")
-    public ResponseEntity commentRead(@RequestParam Long article_id) throws Exception {
-        return new ResponseEntity(commentService.getCommentList(article_id), HttpStatus.OK);
+    public ResponseEntity commentRead(@ModelAttribute CommentCriteria commentCriteria) throws Exception {
+        return new ResponseEntity(commentService.getCommentList(commentCriteria), HttpStatus.OK);
     }
 
     @PutMapping(value = "/{id}")
