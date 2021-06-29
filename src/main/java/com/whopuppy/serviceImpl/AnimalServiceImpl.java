@@ -148,4 +148,11 @@ public class AnimalServiceImpl implements AnimalService {
         return new ResponseEntity(("리스트 입력이 완료되었습니다"), HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity searchAnimal(String address) {
+        List<AnimalDTO> animalDTOList;
+        animalDTOList = animalMapper.searchAnimal(address);
+        return new ResponseEntity(animalDTOList, HttpStatus.OK);
+    }
+
 }

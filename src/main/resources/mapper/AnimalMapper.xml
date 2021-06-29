@@ -11,4 +11,10 @@
         </foreach>
 
     </insert>
+
+    <select id="searchAnimal" parameterType="String" resultType="com.whopuppy.domain.AnimalDTO">
+        select * from whopuppy.animal_list
+        where processState not like '%종료%' and careAddr like '%${address}%'
+    </select>
+
 </mapper>

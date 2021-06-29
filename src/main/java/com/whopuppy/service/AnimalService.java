@@ -10,4 +10,6 @@ import java.util.List;
 public interface AnimalService {
     void insertAnimalJson(List animalDTOList);
     ResponseEntity insertAnimalList() throws IOException, ParseException;
+    ResponseEntity searchAnimal(String address);
+
 }
